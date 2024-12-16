@@ -1,57 +1,46 @@
 import '../styles/reset.css';
-import Project from './project.js';
-import Logger from './logger.js';
+import Project from './project';
+import App from './app';
+import { INITIAL_PROJECTS } from './initial-tasks';
 
-class TodoApp {
-	constructor() {
-		this.projects = [];
-	}
+function display() {
+	const app = new App();
+	const contentDom = document.querySelector('#content');
 
-	addProject(name) {
-		const index = this.projects.findIndex(
-			(project) => project.name.toLowerCase() === name.toLowerCase()
+	function initializeApp() {
+		INITIAL_PROJECTS.forEach(({ title, todos }) =>
+			app.projects.push(new Project(title, todos))
 		);
-
-		if (index === -1) {
-			this.projects.push(new Project(name));
-			this.printProjects();
-		} else {
-			Logger.logMessage(`Project ${name} has already existed.`);
-		}
 	}
 
-	editProject(id, name) {
-		const project = this.projects.find((project) => project.id === id);
+	function updateDisplay() {
+		contentDom.innerHTML = app.projects
+			.map(
+				(project) =>
+					`
+      <div class="project">
+        <h2>${project.title}</h2>
 
-		if (project) {
-			project.edit(name);
-			this.printProjects();
-		}
+        <div>
+          ${project.todos
+						.map(
+							(todo) =>
+								`
+              <button>
+							${todo.title} 0/3
+              </button>
+            `
+						)
+						.join('')}
+        </div>
+      </div>
+      `
+			)
+			.join('');
 	}
 
-	deleteProject(projectId) {
-		const project = this.projects.find((item) => (item.id = projectId));
-
-		if (project) {
-			this.projects = this.projects.filter((item) => item.id !== projectId);
-
-			Logger.logMessage(`Project ${project.name} has been removed.`);
-			this.printProjects();
-		}
-	}
-
-	printProjects() {
-		this.projects.forEach((project) => {
-			Logger.logMessage(project.name);
-
-			if (project.todos.length === 0) {
-				Logger.logMessage('No todo.');
-			} else {
-				project.todos.forEach((todo) => Logger.logMessage(todo.title));
-			}
-		});
-	}
+	initializeApp();
+	updateDisplay();
 }
 
-const app = new TodoApp();
-window.app = app;
+display();

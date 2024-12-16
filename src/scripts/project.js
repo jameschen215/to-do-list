@@ -4,14 +4,20 @@ import Todo from './to-do.js';
 let nextId = 1;
 
 export default class Project {
-	constructor(name) {
+	constructor(title, todos = []) {
 		this.id = nextId++;
-		this.name = name;
+		this.title = title;
 		this.todos = [];
+
+		if (todos.length !== 0) {
+			todos.forEach((todoData) => {
+				this.todos.push(new Todo(todoData));
+			});
+		}
 	}
 
-	edit(name) {
-		this.name = name;
+	editProject(title) {
+		this.title = title;
 	}
 
 	completeAll() {
@@ -22,34 +28,30 @@ export default class Project {
 		this.todos.forEach((todo) => (todo.completed = false));
 	}
 
-	addItem(title, description, dueDate, priority) {
+	addItem(todoData) {
+		const { title } = todoData;
+		if (title === '') return;
+
 		const index = this.todos.findIndex(
-			(todo) => todo.name.toLowerCase() === title.toLowerCase()
+			(todo) => todo.title.toLowerCase() === title.toLowerCase()
 		);
 
 		if (index === -1) {
-			const todo = new Todo({
-				title,
-				description,
-				dueDate,
-				priority,
-				project: this.name,
-			});
+			const todo = new Todo(todoData);
 			this.todos.push(todo);
-
-			Logger.logMessage(`${todo.title} has been added to ${this.name} list.`);
 		} else {
 			Logger.logMessage(`Todo ${title} has already existed.`);
 		}
 	}
 
-	editItem(id, title, description, dueDate, priority, completed) {
+	editItem(id, todoData) {
+		const { title } = todoData;
+		if (title === '') return;
+
 		const todo = this.todos.find((todo) => todo.id === id);
-
 		if (todo) {
-			todo.edit({ title, description, dueDate, priority, completed });
-
-			Logger.logMessage(`${todo.title} has been updated.`);
+			todo.edit(todoData);
+			Logger.logMessage(`${todo.id} has been updated.`);
 		}
 	}
 
@@ -59,16 +61,8 @@ export default class Project {
 		if (todo) {
 			this.todos = this.todos.filter((item) => item.id !== id);
 			Logger.logMessage(
-				`${todo.title} has been removed from ${this.name} list.`
+				`${todo.title} has been removed from ${this.title} list.`
 			);
 		}
-	}
-
-	printTodos() {
-		this.todos.forEach((todo) => {
-			Logger.logMessage(
-				`${todo.id} | ${todo.title} | ${todo.dueDate} | ${todo.completed}`
-			);
-		});
 	}
 }
