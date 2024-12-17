@@ -7,6 +7,7 @@ export default class Todo {
 		title,
 		dueDate,
 		priority,
+		projectId,
 		description = '',
 		notes = '',
 		checklist = [],
@@ -15,6 +16,7 @@ export default class Todo {
 		this.title = title;
 		this.dueDate = dueDate;
 		this.priority = priority;
+		this.projectId = projectId;
 		this.description = description;
 		this.notes = notes;
 		this.completed = false;
@@ -27,12 +29,25 @@ export default class Todo {
 				this.checklist.push(newItem);
 			});
 		}
+
+		/**
+		 * console.log(this.title);
+		 * this.checklist.forEach((listItem) => {
+		 * console.log(`  ${listItem.task}`);
+		 * });
+		 * console.log('\n');
+		 */
 	}
 
-	editTodo({ title, dueDate, priority, completed, description, notes }) {
+	toggleCompleted() {
+		this.completed = !this.completed;
+	}
+
+	edit({ title, dueDate, priority, projectId, completed, description, notes }) {
 		this.title = title;
 		this.dueDate = dueDate;
 		this.priority = priority;
+		this.projectId = projectId;
 		this.completed = completed;
 		this.description = description;
 		this.notes = notes;
@@ -40,8 +55,7 @@ export default class Todo {
 	}
 
 	addChecklistItem(task, done) {
-		if (task === '') return;
-		this.checklist.push(ChecklistItem(task, done));
+		this.checklist.push(new ChecklistItem(task, done));
 	}
 
 	removeChecklistItem(checklistItemId) {

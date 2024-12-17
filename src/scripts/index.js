@@ -2,15 +2,35 @@ import '../styles/reset.css';
 import Project from './project';
 import App from './app';
 import { INITIAL_PROJECTS } from './initial-tasks';
+import Todo from './to-do';
 
 function display() {
 	const app = new App();
+	window.app = app;
 	const contentDom = document.querySelector('#content');
 
 	function initializeApp() {
-		INITIAL_PROJECTS.forEach(({ title, todos }) =>
-			app.projects.push(new Project(title, todos))
-		);
+		const allProjects = INITIAL_PROJECTS.map((project) => project.title);
+
+		allProjects.forEach((title) => {
+			app.projects.push(new Project(title));
+		});
+
+		INITIAL_PROJECTS.forEach((projectData) => {
+			projectData.todos.forEach((todoData) => {
+				const project = app.projects.find(
+					(project) => project.title === projectData.title
+				);
+
+				if (project) {
+					const newTodo = new Todo({ ...todoData, projectId: project.id });
+					project.todoIds.push(newTodo.id);
+					app.todos.push(newTodo);
+				}
+			});
+		});
+
+		app.printTodos();
 	}
 
 	function updateDisplay() {
@@ -18,23 +38,24 @@ function display() {
 			.map(
 				(project) =>
 					`
-      <div class="project">
-        <h2>${project.title}</h2>
+					<div class="project">
+						<h2>${project.title}</h2>
 
-        <div>
-          ${project.todos
-						.map(
-							(todo) =>
-								`
-              <button>
-							${todo.title} 0/3
-              </button>
-            `
-						)
-						.join('')}
-        </div>
-      </div>
-      `
+						<div>
+							${project.todoIds
+								.map((todoId) =>
+									app.todos
+										.map((todo) =>
+											todo.id === todoId
+												? `<button>${todo.title} ${todo.dueDate} ${todo.completed}</button>`
+												: ''
+										)
+										.join('')
+								)
+								.join('')}
+						</div>
+					</div>
+      		`
 			)
 			.join('');
 	}
