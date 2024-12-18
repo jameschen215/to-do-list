@@ -7,7 +7,7 @@ export default class ChecklistItem {
 		this.done = done;
 	}
 
-	editTask(task) {
+	editItem(task) {
 		this.task = task;
 	}
 

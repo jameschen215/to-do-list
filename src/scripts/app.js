@@ -93,10 +93,10 @@ export default class App {
 		);
 
 		if (project !== undefined) {
-			todo.edit({ ...todoData, projectId: project.id });
+			todo.editTodo({ ...todoData, projectId: project.id });
 		} else {
 			const newProject = new Project(projectTitle);
-			todo.edit({ ...todoData, projectId: project.id });
+			todo.editTodo({ ...todoData, projectId: project.id });
 
 			newProject.todoIds.push(todo.id);
 			this.projects.push(newProject);
@@ -144,26 +144,26 @@ export default class App {
 		this.printTodos();
 	}
 
-	editChecklistItem(todoId, taskId, task) {
+	editChecklistItem(todoId, listItemId, task) {
 		const todo = this.todos.find((todo) => todo.id === todoId);
-		const taskObj = todo.checklist.find((task) => task.id === taskId);
+		const listItem = todo.checklist.find((task) => task.id === listItemId);
 
-		if (todo === undefined || taskObj === undefined) return;
+		if (todo === undefined || listItem === undefined) return;
 
-		taskObj.editTask(task);
+		listItem.editItem(task);
 
 		this.printTodos();
 	}
 
-	toggleSubtask(todoId, subTaskId) {
+	toggleSubtask(todoId, listItemId) {
 		const todo = this.todos.find((todo) => todo.id === todoId);
-		const subTask = todo.checklist.find(
-			(listItem) => listItem.id === subTaskId
+		const listItem = todo.checklist.find(
+			(listItem) => listItem.id === listItemId
 		);
 
-		if (todo === undefined || subTask === undefined) return;
+		if (todo === undefined || listItem === undefined) return;
 
-		subTask.toggleDone();
+		listItem.toggleDone();
 
 		this.printTodos();
 	}

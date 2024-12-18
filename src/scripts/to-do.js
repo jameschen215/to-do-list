@@ -43,7 +43,15 @@ export default class Todo {
 		this.completed = !this.completed;
 	}
 
-	edit({ title, dueDate, priority, projectId, completed, description, notes }) {
+	editTodo({
+		title,
+		dueDate,
+		priority,
+		projectId,
+		completed,
+		description,
+		notes,
+	}) {
 		this.title = title;
 		this.dueDate = dueDate;
 		this.priority = priority;
