@@ -10,4 +10,13 @@ export default class Project {
 	editTitle(title) {
 		this.title = title;
 	}
+
+	makeAllTodosCompleted() {
+		// TODO:
+		this.todoIds;
+	}
+
+	makeAllTodosIncomplete() {
+		// TODO:
+	}
 }

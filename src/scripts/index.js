@@ -1,4 +1,5 @@
 import '../styles/reset.css';
+import '../styles/main.css';
 import Project from './project';
 import App from './app';
 import { INITIAL_PROJECTS } from './initial-tasks';
@@ -61,7 +62,7 @@ function display() {
 	}
 
 	initializeApp();
-	updateDisplay();
+	// updateDisplay();
 }
 
 display();
