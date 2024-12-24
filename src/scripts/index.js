@@ -1,68 +1,94 @@
 import '../styles/reset.css';
 import '../styles/main.css';
-import Project from './project';
-import App from './app';
-import { INITIAL_PROJECTS } from './initial-tasks';
-import Todo from './to-do';
 
-function display() {
-	const app = new App();
-	window.app = app;
-	const contentDom = document.querySelector('#content');
+import { initializeApp } from './logic/initialize-app';
 
-	function initializeApp() {
-		const allProjects = INITIAL_PROJECTS.map((project) => project.title);
+import sidebar from './components/sidebar';
+import contentHeader from './components/content-header';
+import todoList from './components/todo-list';
+import todoDetail from './components/todo-detail';
 
-		allProjects.forEach((title) => {
-			app.projects.push(new Project(title));
-		});
+(function displayController() {
+	const app = initializeApp();
 
-		INITIAL_PROJECTS.forEach((projectData) => {
-			projectData.todos.forEach((todoData) => {
-				const project = app.projects.find(
-					(project) => project.title === projectData.title
-				);
+	let activeProject = app.projects[0];
+	let activeTodo = activeProject.todos[0];
 
-				if (project) {
-					const newTodo = new Todo({ ...todoData, projectId: project.id });
-					project.todoIds.push(newTodo.id);
-					app.todos.push(newTodo);
-				}
-			});
-		});
-
-		app.printTodos();
-	}
+	const sidebarDom = document.querySelector('#sidebar');
+	const contentHeaderDom = document.querySelector('#content-header');
+	const todoListDom = document.querySelector('#todo-list');
+	const todoDetailDom = document.querySelector('#todo-detail');
 
 	function updateDisplay() {
-		contentDom.innerHTML = app.projects
-			.map(
-				(project) =>
-					`
-					<div class="project">
-						<h2>${project.title}</h2>
+		sidebarDom.innerHTML = sidebar(app.projects, activeProject);
+		contentHeaderDom.innerHTML = contentHeader(activeProject.title);
+		todoListDom.innerHTML = todoList(activeProject.todos, activeTodo);
+		todoDetailDom.innerHTML = todoDetail(activeProject.title, activeTodo);
 
-						<div>
-							${project.todoIds
-								.map((todoId) =>
-									app.todos
-										.map((todo) =>
-											todo.id === todoId
-												? `<button>${todo.title} ${todo.dueDate} ${todo.completed}</button>`
-												: ''
-										)
-										.join('')
-								)
-								.join('')}
-						</div>
-					</div>
-      		`
-			)
-			.join('');
+		handleProjectClick();
+		handleTodoClick();
+		handleToggleTodos();
+		handleToggleChecklistItem();
 	}
 
-	initializeApp();
-	// updateDisplay();
-}
+	updateDisplay();
 
-display();
+	function handleProjectClick() {
+		const projectButtons = document.querySelectorAll('.project');
+
+		projectButtons.forEach((button) => {
+			button.addEventListener('click', (event) => {
+				const projectId = parseInt(event.currentTarget.dataset.projectId);
+				activeProject = app.projects.find(
+					(project) => project.id === projectId
+				);
+				activeTodo = activeProject.todos[0];
+
+				updateDisplay();
+			});
+		});
+	}
+
+	function handleTodoClick() {
+		const todoItems = document.querySelectorAll('.todo-list-item');
+
+		todoItems.forEach((item) => {
+			item.addEventListener('click', (event) => {
+				const todoId = parseInt(event.currentTarget.dataset.todoId);
+				activeTodo = activeProject.todos.find((todo) => todo.id === todoId);
+
+				updateDisplay();
+			});
+		});
+	}
+
+	function handleToggleTodos() {
+		const checkboxes = document.querySelectorAll('.complete');
+
+		checkboxes.forEach((checkbox) => {
+			checkbox.addEventListener('click', (event) => {
+				event.stopImmediatePropagation();
+
+				const todoId = parseInt(event.currentTarget.id);
+				const todo = activeProject.todos.find((todo) => todo.id === todoId);
+				todo.toggleCompleted();
+			});
+		});
+	}
+
+	function handleToggleChecklistItem() {
+		const checkboxes = document.querySelectorAll('.done');
+
+		checkboxes.forEach((checkbox) => {
+			checkbox.addEventListener('click', (event) => {
+				event.stopImmediatePropagation();
+
+				const checklistItemId = parseInt(event.currentTarget.id);
+				const checklistItem = activeTodo.checklist.find(
+					(checklistItem) => checklistItem.id === checklistItemId
+				);
+				checklistItem.toggleDone();
+			});
+		});
+	}
+})();

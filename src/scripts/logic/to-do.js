@@ -3,44 +3,26 @@ import ChecklistItem from './checklist-item';
 let nextId = 1;
 
 export default class Todo {
-	constructor({
-		title,
-		dueDate,
-		priority,
-		projectId,
-		description = '',
-		notes = '',
-		checklist = [],
-	}) {
+	constructor({ title, dueDate, priority, description = '', notes = '' }) {
 		this.id = nextId++;
 		this.title = title;
-		this.dueDate = dueDate;
+		this.dueDate = new Date(dueDate);
 		this.priority = priority;
-		this.projectId = projectId;
 		this.description = description;
 		this.notes = notes;
 		this.completed = false;
 		this.createdDate = new Date();
 		this.checklist = [];
-
-		if (checklist.length !== 0) {
-			checklist.forEach((item) => {
-				const newItem = new ChecklistItem(item.task, item.done);
-				this.checklist.push(newItem);
-			});
-		}
-
-		/**
-		 * console.log(this.title);
-		 * this.checklist.forEach((listItem) => {
-		 * console.log(`  ${listItem.task}`);
-		 * });
-		 * console.log('\n');
-		 */
 	}
 
 	toggleCompleted() {
 		this.completed = !this.completed;
+
+		if (this.completed) {
+			this.checklist.forEach((checklistItem) => {
+				checklistItem.done = true;
+			});
+		}
 	}
 
 	editTodo({
@@ -62,11 +44,21 @@ export default class Todo {
 		this.updatedDate = new Date();
 	}
 
-	addChecklistItem(task, done) {
-		this.checklist.push(new ChecklistItem(task, done));
+	addChecklistItem(name, done) {
+		this.checklist.push(new ChecklistItem(name, done));
 	}
 
-	removeChecklistItem(checklistItemId) {
+	editChecklistItem(checklistItemId, name) {
+		const item = this.checklist.find(
+			(checklistItem) => checklistItem.id === checklistItemId
+		);
+
+		if (item !== undefined) {
+			item.editItem(name);
+		}
+	}
+
+	deleteChecklistItem(checklistItemId) {
 		const index = this.checklist.findIndex(
 			(checklistItem) => checklistItem.id === checklistItemId
 		);

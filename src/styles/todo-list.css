@@ -1,0 +1,45 @@
+/* -------- Style todo list in content -------- */
+.content .todo-list {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+
+	overflow-y: auto;
+
+	.todo-list-item {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 8px 16px;
+		border-radius: 8px;
+		border: none;
+		outline: none;
+		background-color: transparent;
+		cursor: pointer;
+
+		div {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+
+			span {
+				white-space: nowrap;
+			}
+		}
+	}
+
+	.todo-list-item:hover {
+		background-color: #f4f4f5;
+		box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
+	}
+
+	.todo-list-item.active {
+		font-weight: 500;
+		background-color: #f4f4f5;
+		box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
+	}
+}
+
+.icon-btn.add-todo-btn {
+	color: #71717a;
+}

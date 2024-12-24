@@ -1,0 +1,11 @@
+/* ----------- Style header in content ----------- */
+.content .content-header {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+
+	width: max-content;
+	height: 48px;
+	border-radius: 60px;
+	padding: 0 30px;
+}

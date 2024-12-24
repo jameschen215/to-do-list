@@ -1,10 +1,8 @@
-import ChecklistItem from './checklist-item';
 import Project from './project';
-import Todo from './to-do';
+import { formatDistanceToNow } from 'date-fns';
 
 export default class App {
 	constructor() {
-		this.todos = [];
 		this.projects = [];
 	}
 
@@ -13,27 +11,15 @@ export default class App {
 		this.projects.push(new Project(title));
 
 		// Print to console
-		this.printTodos();
+		this.printProjects();
 	}
 
 	deleteProject(projectId) {
-		// TODO:
-		// Check if project exists
-		const project = this.projects.find((project) => project.id === projectId);
-		if (project === undefined) return;
-
-		// Check if the project has any todo items, if yes, you can't delete it
-		// Or you delete its todo items first
-		if (project.todoIds.length !== 0) {
-			console.log('You cannot delete a project with todo items.');
-			return;
-		}
-
-		// Do the delete action
+		// Delete project
 		this.projects = this.projects.filter((project) => project.id !== projectId);
 
 		// Print to console
-		this.printTodos();
+		this.printProjects();
 	}
 
 	editProject(projectId, title) {
@@ -45,9 +31,10 @@ export default class App {
 		project.title = title;
 
 		// Print to console
-		this.printTodos();
+		this.printProjects();
 	}
 
+	/*
 	addTodo(todoData) {
 		const { projectTitle } = todoData;
 		if (projectTitle === '') return;
@@ -167,26 +154,20 @@ export default class App {
 
 		this.printTodos();
 	}
-
-	printTodos() {
+*/
+	printProjects() {
 		this.projects.forEach((project) => {
 			console.log(project.title.toUpperCase());
 
-			project.todoIds.forEach((todoId) => {
-				this.todos.forEach((todo) => {
-					if (todo.id === todoId) {
-						console.log(
-							`  ${todo.id}: ${todo.title} - ${todo.dueDate} - ${todo.completed}`
-						);
+			project.todos.forEach((todo) => {
+				console.log(
+					`${todo.id} ${todo.title} ${formatDistanceToNow(todo.dueDate)} ${
+						todo.completed ? '✅' : '❌'
+					}`
+				);
 
-						if (todo.checklist.length !== 0) {
-							todo.checklist.forEach((listItem) => {
-								console.log(
-									`    Task: ${listItem.task} - Done: ${listItem.done}`
-								);
-							});
-						}
-					}
+				todo.checklist.forEach((listItem) => {
+					console.log(`  - ${listItem.name} ${listItem.done ? '✅' : '❌'}`);
 				});
 			});
 		});

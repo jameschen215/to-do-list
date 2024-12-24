@@ -1,14 +1,14 @@
 let nextId = 1;
 
 export default class ChecklistItem {
-	constructor(task, done = false) {
+	constructor({ name, done = false }) {
 		this.id = nextId++;
-		this.task = task;
+		this.name = name;
 		this.done = done;
 	}
 
-	editItem(task) {
-		this.task = task;
+	editItem(name) {
+		this.name = name;
 	}
 
 	toggleDone() {
