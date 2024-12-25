@@ -3,29 +3,23 @@ import { formatDistanceToNow } from 'date-fns';
 import { capitalizeFirstLetter } from '../utils';
 
 export default function todoDetail(projectTitle, todo) {
+	const doubleArrowIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-right"><path d="m6 17 5-5-5-5"/><path d="m13 17 5-5-5-5"/></svg>`;
+	const checkIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>`;
+
+	if (todo === undefined) {
+		return null;
+	}
+
 	const headerHtml = `
     <div class="detail-header">
       <div class="breadcrumb">
         <span>My projects</span>
-        <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="lucide lucide-chevrons-right">
-            <path d="m6 17 5-5-5-5" />
-            <path d="m13 17 5-5-5-5" />
-          </svg>
-        </div>
+        <div>${doubleArrowIcon}</div>
         <span>${capitalizeFirstLetter(projectTitle)}</span>
       </div>
-      <button class="toggle-complete-btn">Mark as complete</button>
+      <button class="toggle-complete-btn ${todo.completed ? 'completed' : ''}">
+        ${todo.completed ? 'Completed' : 'Mark as complete'}
+      </button>
     </div>
   `;
 
@@ -42,7 +36,7 @@ export default function todoDetail(projectTitle, todo) {
 		.join('');
 
 	const contentHtml = `
-    <div class="detail-content">
+    <div class="detail-content ${todo.completed ? 'completed' : ''}">
       <div class="detail-row detail-title">
         <h2>${todo.title}</h2>
       </div>

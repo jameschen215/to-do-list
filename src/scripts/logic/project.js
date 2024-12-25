@@ -1,3 +1,5 @@
+import Todo from '../logic/to-do';
+
 let nextId = 1;
 
 export default class Project {

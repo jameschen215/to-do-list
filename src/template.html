@@ -19,5 +19,85 @@
 				<div id="todo-detail" class="todo-detail"></div>
 			</div>
 		</div>
+
+		<!-- Add form -->
+		<dialog id="form-dialog" class="form-dialog">
+			<form id="add-form" class="add-form" method="dialog">
+				<h2 class="form-title">Add Todo</h2>
+
+				<div class="form-group">
+					<label for="title" class="form-label">Title</label>
+					<input
+						type="text"
+						id="title"
+						name="title"
+						class="form-control"
+						required />
+				</div>
+
+				<div class="form-group">
+					<label for="due-date" class="form-label">Due Date</label>
+					<input
+						type="date"
+						id="due-date"
+						name="dueDate"
+						class="form-control"
+						required />
+				</div>
+
+				<div class="form-group">
+					<label for="priority" class="form-label">Priority</label>
+					<div class="custom-select">
+						<select id="priority" name="priority" class="form-control" required>
+							<option value="0">High</option>
+							<option value="1">Medium</option>
+							<option value="2">Low</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="description" class="form-label">Description</label>
+					<textarea
+						id="description"
+						name="description"
+						class="form-control"
+						rows="2"></textarea>
+				</div>
+
+				<div class="form-group">
+					<label for="notes" class="form-label">Notes</label>
+					<textarea
+						id="notes"
+						name="notes"
+						class="form-control"
+						rows="2"></textarea>
+				</div>
+
+				<div class="form-group">
+					<button type="submit" class="submit-btn">Add</button>
+				</div>
+			</form>
+
+			<button
+				type="button"
+				id="close-dialog-btn"
+				class="icon-btn cancel-dialog-btn">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="lucide lucide-x">
+					<path d="M18 6 6 18" />
+					<path d="m6 6 12 12" />
+				</svg>
+			</button>
+		</dialog>
 	</body>
 </html>
