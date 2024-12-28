@@ -5,6 +5,7 @@ export default class ChecklistItem {
 		this.id = nextId++;
 		this.name = name;
 		this.done = done;
+		this.createdDate = new Date();
 	}
 
 	editItem(name) {

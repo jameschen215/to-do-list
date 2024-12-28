@@ -1,31 +1,70 @@
 import '../../styles/content-header.css';
-import { capitalizeFirstLetter } from '../utils';
+import { capitalizeFirstLetter, PLUS_ICON, SORT_ICON } from '../utils';
 
-export default function contentHeader(projectTitle) {
-	const sortIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-up-down"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>`;
-	const addIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>`;
+export default function contentHeader(activeProject) {
+	const container = document.createElement('div');
 
-	const title = capitalizeFirstLetter(projectTitle);
+	const title = document.createElement('h1');
+	title.classList.add('project-title');
+	title.textContent =
+		activeProject !== undefined
+			? capitalizeFirstLetter(activeProject.title)
+			: 'No project';
 
-	return `
-    <h1 class="project-title">${title}</h1>
+	const divider1 = document.createElement('div');
+	divider1.classList.add('divider');
+	const divider2 = document.createElement('div');
+	divider2.classList.add('divider');
 
-      <div class="divider"></div>
+	const selectContainer = document.createElement('div');
+	selectContainer.classList.add('select-container');
 
-        <div class="select-wrapper">
-          <label class="select-label" for="sort-todo">${sortIcon}</label>
-          
-          <select id="sort-todo" class="sort-todo-select">
-            <option value="title">Title</option>
-            <option value="dueDate">Date</option>
-            <option value="priority">Priority</option>
-          </select>
-        </div>
-      
-      <div class="divider"></div>
+	const selectLabel = document.createElement('label');
+	selectLabel.innerHTML = SORT_ICON;
+	if (activeProject === undefined) {
+		selectLabel.classList.add('disabled');
+	}
 
-      <button id="add-todo-btn" class="icon-btn">
-        ${addIcon}
-      </button>
-  `;
+	const select = document.createElement('select');
+	select.id = 'sort-select';
+	select.disabled = activeProject === undefined;
+	select.innerHTML = `
+	<option value="priority">Priority</option>
+		<option value="title">Title</option>
+		<option value="dueDate">Due</option>`;
+
+	const addButton = document.createElement('button');
+	addButton.id = 'add-todo-btn';
+	addButton.classList.add('icon-btn');
+	addButton.classList.add('add-todo-btn');
+	addButton.innerHTML = PLUS_ICON;
+	addButton.disabled = activeProject === undefined;
+
+	selectContainer.appendChild(selectLabel);
+	selectContainer.appendChild(select);
+
+	container.appendChild(title);
+	container.appendChild(divider1);
+	container.appendChild(selectContainer);
+	container.appendChild(divider2);
+	container.appendChild(addButton);
+
+	return container.innerHTML;
+
+	// return `
+	//   <h1 class="project-title">${capitalizeFirstLetter(titleContent)}</h1>
+
+	//     <div class="divider"></div>
+
+	//       <div class="select-container">
+	//         <label class="select-label" for="sort-todo">${SORT_ICON}</label>
+	//         ${select}
+	//       </div>
+
+	//     <div class="divider"></div>
+
+	//     <button id="add-todo-btn" class="icon-btn">
+	//       ${PLUS_ICON}
+	//     </button>
+	// `;
 }

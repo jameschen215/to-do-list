@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 html {
 	font-size: 62.5%;
@@ -8,28 +8,30 @@ html {
 body {
 	height: 100%;
 
-	font-family: 'Poppins', serif;
+	font-family: 'Noto Sans', serif;
+	font-optical-sizing: auto;
 	font-weight: 400;
 	font-style: normal;
+	font-variation-settings: 'wdth' 100;
+
 	font-size: 1.6rem;
 	color: #333;
 	background-color: #f4f4f5;
 }
 
+h1,
+h2,
+h3,
+h4 {
+	font-family: 'Lora', serif;
+	font-optical-sizing: auto;
+	font-weight: 700;
+	font-style: normal;
+}
+
 h1 {
 	font-size: 2.4rem;
 	font-weight: 700;
-}
-
-h2 {
-	font-size: 2rem;
-	font-weight: 600;
-}
-
-h3 {
-	text-transform: uppercase;
-	font-size: 1.6rem;
-	font-weight: 500;
 }
 
 /* p {
@@ -55,6 +57,14 @@ h3 {
 
 .icon-btn:hover {
 	color: #0369a1;
+}
+
+.delete-btn {
+	color: #a1a1aa;
+}
+
+.delete-btn:hover {
+	color: red;
 }
 
 .divider {
@@ -236,96 +246,105 @@ dialog[open]::backdrop {
 }
 
 /* ---------------- Style form in dialog ---------------- */
-.add-form {
+/* Add todo form */
+.add-todo-form,
+.add-project-form {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
+}
 
-	h2 {
-		text-align: center;
+.add-project-form {
+	gap: 30px;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+
+	label {
+		font-size: 1.4rem;
+		font-weight: 500;
+		text-transform: uppercase;
 	}
 
-	.form-group {
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
+	input {
+		outline: none;
+		padding: 8px 12px;
+		border: 1px solid #d4d4d8;
+		border-radius: 4px;
+		font-size: 1.6rem;
+	}
 
-		label {
-			font-size: 1.4rem;
-			font-weight: 500;
-		}
+	textarea {
+		outline: none;
+		padding: 8px 12px;
+		border: 1px solid #d4d4d8;
+		border-radius: 4px;
+		font-size: 1.6rem;
+		resize: vertical;
+	}
 
-		input {
-			outline: none;
-			padding: 8px 12px;
-			border: 1px solid #d4d4d8;
-			border-radius: 4px;
-			font-size: 1.6rem;
-		}
+	input:focus,
+	textarea:focus {
+		border-color: #007bff;
+		/* box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); */
+	}
 
-		textarea {
-			outline: none;
-			padding: 8px 12px;
-			border: 1px solid #d4d4d8;
-			border-radius: 4px;
-			font-size: 1.6rem;
-			resize: vertical;
-		}
+	.custom-select {
+		position: relative;
+		width: 100%;
+	}
 
-		input:focus,
-		textarea:focus {
-			border-color: #007bff;
-			box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-		}
+	.custom-select select {
+		appearance: none; /* Remove default arrow */
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		-ms-appearance: none;
+		outline: none;
 
-		.custom-select {
-			position: relative;
-			width: 100%;
-		}
+		width: 100%;
 
-		.custom-select select {
-			appearance: none; /* Remove default arrow */
-			-webkit-appearance: none;
-			-moz-appearance: none;
-			-ms-appearance: none;
-			outline: none;
+		padding: 8px 12px;
+		border: 1px solid #d4d4d8;
+		border-radius: 4px;
+		font-size: 1.6rem;
+	}
 
-			width: 100%;
+	.custom-select::after {
+		content: '▾';
+		position: absolute;
+		top: 50%;
+		right: 12px;
+		transform: translateY(-50%);
+		pointer-events: none;
+	}
 
-			padding: 8px 12px;
-			border: 1px solid #d4d4d8;
-			border-radius: 4px;
-			font-size: 1.6rem;
-		}
+	.custom-select select:focus {
+		border-color: #007bff;
+		box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+	}
 
-		.custom-select::after {
-			content: '▾';
-			position: absolute;
-			top: 50%;
-			right: 12px;
-			transform: translateY(-50%);
-			pointer-events: none;
-		}
+	.submit-btn {
+		padding: 8px 12px;
+		border: none;
+		border-radius: 4px;
+		background-color: #0369a1;
+		color: #fff;
+		font-size: 1.6rem;
+		font-weight: 500;
+		cursor: pointer;
+		transition: background-color 200ms ease-in-out;
+	}
 
-		.custom-select select:focus {
-			border-color: #007bff;
-			box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-		}
-
-		.submit-btn {
-			padding: 8px 12px;
-			border: none;
-			border-radius: 4px;
-			background-color: #0369a1;
-			color: #fff;
-			font-size: 1.6rem;
-			font-weight: 500;
-			cursor: pointer;
-			transition: background-color 200ms ease-in-out;
-		}
-
-		.submit-btn:hover {
-			filter: brightness(1.1);
-		}
+	.submit-btn:hover {
+		filter: brightness(1.1);
 	}
 }
+
+/* Add project form */
+
+/* .hidden {
+	display: none;
+} */

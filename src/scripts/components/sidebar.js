@@ -1,15 +1,38 @@
 import '../../styles/sidebar.css';
+import {
+	capitalizeFirstLetter,
+	PLUS_ICON,
+	EDIT_ICON,
+	DELETE_ICON,
+} from '../utils';
 
 export default function sidebar(projects, activeProject) {
 	const projectsHtml = projects
 		.map(
 			(project) => `
-      <button class="project ${
-				project === activeProject ? 'active' : ''
-			}" data-project-id="${project.id}">
-          <p class="project-title">${project.title}</p>
-          <span class="counter">${project.todos.length}</span>
-      </button>
+      <li
+				class="project ${project.id === activeProject.id ? 'active' : ''}" 
+				data-project-id="${project.id}">
+
+				<div> 
+					<p class="project-title">${capitalizeFirstLetter(project.title)}</p>
+					<span class="counter">${project.todos.length}</span>
+				</div>
+				
+				<div>
+					<button 
+						class="icon-btn edit-btn edit-project-btn" 
+						data-project-id="${project.id}">
+						${EDIT_ICON}
+					</button>
+
+					<button 
+						class="icon-btn delete-btn delete-project-btn" 
+						data-project-id="${project.id}">
+						${DELETE_ICON}
+					</button>
+				</div>
+      </li>
     `
 		)
 		.join('');
@@ -20,31 +43,18 @@ export default function sidebar(projects, activeProject) {
 			<span class="username">James</span>
 		</button>
 
-		<div class="projects-wrapper">
+		<div class="projects-container">
 			<div class="project-header">
 				<h3>My Projects</h3>
 
-        <button class="icon-btn">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="lucide lucide-plus">
-            <path d="M5 12h14" />
-            <path d="M12 5v14" />
-          </svg>
+        <button id="add-project-btn" class="icon-btn">
+          ${PLUS_ICON}
         </button>
 			</div>
 
-      <div class="projects">
+      <ul class="projects">
         ${projectsHtml}
-      </div>
+      </ul>
     </div>
   `;
 }

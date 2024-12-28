@@ -22,6 +22,10 @@ export default class Todo {
 			this.checklist.forEach((checklistItem) => {
 				checklistItem.done = true;
 			});
+		} else {
+			this.checklist.forEach((checklistItem) => {
+				checklistItem.done = false;
+			});
 		}
 	}
 

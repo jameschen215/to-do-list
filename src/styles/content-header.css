@@ -11,7 +11,7 @@
 }
 
 /* ---------------- Custom select styles ---------------- */
-.select-wrapper {
+.select-container {
 	width: fit-content;
 	display: flex;
 	align-items: center;
@@ -20,7 +20,7 @@
 	color: inherit;
 }
 
-.select-wrapper label {
+.select-container label {
 	width: 24px;
 	height: 24px;
 
@@ -29,7 +29,8 @@
 		width: 100%;
 	}
 }
-.select-wrapper select {
+
+.select-container select {
 	appearance: none;
 	width: 100%;
 	font-size: 1.6rem;
@@ -42,27 +43,15 @@
 	cursor: pointer;
 }
 
-.select-wrapper select:hover {
+.select-container select:hover {
 	color: #0369a1;
 }
 
-/* Add todo button */
-/* .add-todo-btn {
-	border: none;
-	outline: none;
-	background-color: transparent;
-	width: 20px;
-	height: 20px;
-	color: #27272a;
-	cursor: pointer;
-	transition: color 200ms ease-in-out;
-
-	svg {
-		width: 100%;
-		height: 100%;
-	}
+.select-container select:disabled,
+.select-container select:disabled:hover,
+.add-todo-btn:disabled,
+.add-todo-btn:disabled:hover,
+.disabled {
+	color: #777;
+	cursor: default;
 }
-
-.add-todo-btn:hover {
-	color: #0369a1;
-} */

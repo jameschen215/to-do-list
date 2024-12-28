@@ -1,29 +1,21 @@
 import '../../styles/todo-list.css';
-import { capitalizeFirstLetter } from '../utils';
+import { capitalizeFirstLetter, DELETE_ICON, EDIT_ICON } from '../utils';
 
 export default function todoList(todos, activeTodo) {
-	const deleteIcon = `<svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-x">
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>`;
+	if (todos.length === 0) {
+		return `
+			<h4 style="text-align: center; margin-top: 30px;">No todo yet</h4>
+			<p style="text-align: center;">Click + to add your todo items.</p>
+		`;
+	}
 
-	const htmlContent = todos
+	return todos
 		.map((todo) => {
 			let todoClassNames = 'todo-list-item';
 			let priorityClassNames = 'priority';
 			let priorityContent = '';
 
-			if (todo === activeTodo) {
+			if (todo.id === activeTodo.id) {
 				todoClassNames += ' active';
 			}
 
@@ -44,22 +36,31 @@ export default function todoList(todos, activeTodo) {
 
 			return `
         <div class="${todoClassNames}" data-todo-id="${todo.id}">
-        <input class="complete" type="checkbox" name="completed" id="${
-					todo.id
-				}" ${todo.completed ? 'checked' : ''} />
+					<input 
+						class="completed-input" 
+						type="checkbox" 
+						id="${todo.id}" 
+						${todo.completed ? 'checked' : ''} 
+					/>
 
-          <div>
-            <span>${capitalizeFirstLetter(todo.title)}</span>
-            <span class="${priorityClassNames}">${priorityContent}</span>
-          </div>
-
-          <button class="icon-btn delete-todo-btn" data-todo-id="${todo.id}">
-            ${deleteIcon}
-          </button>
-        </div>
-    `;
+					<div>
+						<span>${capitalizeFirstLetter(todo.title)}</span>
+						<span class="${priorityClassNames}">${priorityContent}</span>
+					</div>
+					
+					<div>
+						<button 
+							class="icon-btn edit-btn edit-todo-btn" 
+							data-todo-id="${todo.id}">
+							${EDIT_ICON}
+						</button>
+						<button 
+							class="icon-btn delete-btn delete-todo-btn" 
+							data-todo-id="${todo.id}">
+							${DELETE_ICON}
+						</button>
+					</div>
+				</div>`;
 		})
 		.join('');
-
-	return htmlContent;
 }

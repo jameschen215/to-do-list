@@ -18,13 +18,13 @@
 		cursor: pointer;
 		gap: 10px;
 
-		div {
+		div:first-of-type {
 			position: relative;
 			flex: 1;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			gap: 10px;
+			padding: 0 6px;
 		}
 	}
 
@@ -51,8 +51,7 @@
 		box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
 	}
 
-	.todo-list-item.completed div::after,
-	.todo-list-item.active.completed div::after {
+	.completed-input:checked + div:first-of-type:after {
 		content: '';
 		width: 100%;
 		height: 1px;
@@ -64,8 +63,11 @@
 }
 
 .priority {
+	font-family: 'Lora', serif;
+	font-optical-sizing: auto;
+	font-weight: 700;
+	font-style: normal;
 	font-size: 1.2rem;
-	font-weight: 500;
 }
 
 .high {
@@ -80,6 +82,11 @@
 	color: green;
 }
 
-.icon-btn.add-todo-btn {
-	color: #71717a;
+.edit-btn {
+	color: #a1a1aa;
+
+	svg {
+		width: 70%;
+		height: 70%;
+	}
 }

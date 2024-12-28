@@ -10,7 +10,7 @@
 			<!-- Sidebar -->
 			<aside id="sidebar" class="sidebar"></aside>
 
-			<div class="content">
+			<div id="content" class="content">
 				<!-- Content header -->
 				<div id="content-header" class="content-header"></div>
 
@@ -20,9 +20,53 @@
 			</div>
 		</div>
 
-		<!-- Add form -->
+		<!-- form dialog -->
 		<dialog id="form-dialog" class="form-dialog">
-			<form id="add-form" class="add-form" method="dialog">
+			<!-- close dialog button -->
+			<button
+				type="button"
+				id="close-dialog-btn"
+				class="icon-btn cancel-dialog-btn">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="lucide lucide-x">
+					<path d="M18 6 6 18" />
+					<path d="m6 6 12 12" />
+				</svg>
+			</button>
+
+			<!-- Add project form -->
+			<!-- <form
+				method="dialog"
+				id="add-project-form"
+				class="add-project-form hidden">
+				<h2 class="form-title">Add Project</h2>
+
+				<div class="form-group">
+					<input
+						type="text"
+						id="project-title"
+						name="project-title"
+						class="form-control"
+						placeholder="Project Title"
+						required />
+				</div>
+
+				<div class="form-group">
+					<button type="submit" class="submit-btn">Add</button>
+				</div>
+			</form> -->
+
+			<!-- Add todo form -->
+			<!-- <form id="add-todo-form" class="add-todo-form hidden" method="dialog">
 				<h2 class="form-title">Add Todo</h2>
 
 				<div class="form-group">
@@ -77,27 +121,7 @@
 				<div class="form-group">
 					<button type="submit" class="submit-btn">Add</button>
 				</div>
-			</form>
-
-			<button
-				type="button"
-				id="close-dialog-btn"
-				class="icon-btn cancel-dialog-btn">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="lucide lucide-x">
-					<path d="M18 6 6 18" />
-					<path d="m6 6 12 12" />
-				</svg>
-			</button>
+			</form> -->
 		</dialog>
 	</body>
 </html>
