@@ -13,10 +13,10 @@ export default class Project {
 		this.title = title;
 	}
 
-	addTodo({ title, dueDate, priority, description = '', notes = '' }) {
+	addTodo({ title, due, priority, description = '', notes = '' }) {
 		const newTodo = new Todo({
 			title,
-			dueDate,
+			due,
 			priority,
 			description,
 			notes,

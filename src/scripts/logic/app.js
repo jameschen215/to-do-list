@@ -156,20 +156,18 @@ export default class App {
 	}
 */
 	printProjects() {
-		this.projects.forEach((project) => {
-			console.log(project.title.toUpperCase());
-
-			project.todos.forEach((todo) => {
-				console.log(
-					`${todo.id} ${todo.title} ${formatDistanceToNow(todo.dueDate)} ${
-						todo.completed ? '✅' : '❌'
-					}`
-				);
-
-				todo.checklist.forEach((listItem) => {
-					console.log(`  - ${listItem.name} ${listItem.done ? '✅' : '❌'}`);
-				});
-			});
-		});
+		// this.projects.forEach((project) => {
+		// 	console.log(project.title.toUpperCase());
+		// 	project.todos.forEach((todo) => {
+		// 		console.log(
+		// 			`${todo.id} ${todo.title} ${formatDistanceToNow(todo.due)} ${
+		// 				todo.completed ? '✅' : '❌'
+		// 			}`
+		// 		);
+		// 		todo.checklist.forEach((listItem) => {
+		// 			console.log(`  - ${listItem.name} ${listItem.done ? '✅' : '❌'}`);
+		// 		});
+		// 	});
+		// });
 	}
 }

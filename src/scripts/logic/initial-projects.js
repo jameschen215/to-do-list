@@ -2,7 +2,7 @@ const personalTodos = [
 	{
 		title: 'Buy groceries',
 		description: 'Get essential items for the week.',
-		dueDate: '2025-1-18',
+		due: '2025-1-18',
 		priority: 1,
 		notes: 'Check for discounts on snacks.',
 		checklist: [
@@ -14,7 +14,7 @@ const personalTodos = [
 	{
 		title: 'Workout session',
 		description: 'Go to the gym for a strength training session.',
-		dueDate: '2025-1-16',
+		due: '2025-1-16',
 		priority: 2,
 		notes: 'Focus on upper body today.',
 		checklist: [
@@ -26,7 +26,7 @@ const personalTodos = [
 	{
 		title: 'Learning',
 		description: 'Learn something new today.',
-		dueDate: '2025-1-16',
+		due: '2025-1-16',
 		priority: 0,
 		notes: 'Focus on front end.',
 		checklist: [
@@ -41,7 +41,7 @@ const workTodos = [
 	{
 		title: 'Team meeting',
 		description: 'Discuss the quarterly roadmap with the team.',
-		dueDate: '2025-2-20',
+		due: '2025-2-20',
 		priority: 0,
 		notes: 'Prepare the slides in advance.',
 		checklist: [
@@ -53,7 +53,7 @@ const workTodos = [
 	{
 		title: 'Code review',
 		description: 'Review pull requests for the new feature implementation.',
-		dueDate: '2025-1-19',
+		due: '2025-1-19',
 		priority: 1,
 		notes: 'Focus on optimization and bug fixes.',
 		checklist: [
@@ -68,7 +68,7 @@ const travelTodos = [
 	{
 		title: 'Book flight tickets',
 		description: 'Find affordable tickets for the trip to Vancouver.',
-		dueDate: '2025-1-22',
+		due: '2025-1-22',
 		priority: 0,
 		notes: 'Look for early morning flights to save time.',
 		checklist: [
@@ -80,7 +80,7 @@ const travelTodos = [
 	{
 		title: 'Pack luggage',
 		description: 'Get everything ready for the trip.',
-		dueDate: '2025-1-21',
+		due: '2025-1-21',
 		priority: 1,
 		notes: 'Check the weather forecast to decide what to pack.',
 		checklist: [

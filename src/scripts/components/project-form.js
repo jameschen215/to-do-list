@@ -1,9 +1,13 @@
-import '../../styles/form.css';
+import '../../styles/project-form.css';
 
 import { capitalizeFirstLetter } from '../utils';
 
 export default function projectForm(project) {
-	return `
+	const form = document.createElement('form');
+	form.method = 'dialog';
+	form.id = 'project-form';
+	form.classList.add('project-form');
+	form.innerHTML = `
 	<form method="dialog" id="project-form" class="project-form">
 		<h2 class="form-title">
       ${project === undefined ? 'Add Project' : 'Edit Project'}
@@ -29,4 +33,6 @@ export default function projectForm(project) {
 			</button>
 		</div>
 	</form>`;
+
+	return form;
 }

@@ -3,10 +3,10 @@ import ChecklistItem from './checklist-item';
 let nextId = 1;
 
 export default class Todo {
-	constructor({ title, dueDate, priority, description = '', notes = '' }) {
+	constructor({ title, due, priority, description = '', notes = '' }) {
 		this.id = nextId++;
 		this.title = title;
-		this.dueDate = new Date(dueDate);
+		this.due = new Date(due);
 		this.priority = parseInt(priority, 10);
 		this.description = description;
 		this.notes = notes;
@@ -29,17 +29,9 @@ export default class Todo {
 		}
 	}
 
-	editTodo({
-		title,
-		dueDate,
-		priority,
-		projectId,
-		completed,
-		description,
-		notes,
-	}) {
+	editTodo({ title, due, priority, projectId, completed, description, notes }) {
 		this.title = title;
-		this.dueDate = dueDate;
+		this.due = due;
 		this.priority = priority;
 		this.projectId = projectId;
 		this.completed = completed;

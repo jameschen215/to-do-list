@@ -76,7 +76,7 @@ export default function todoDetail(activeProject, activeTodo) {
 
       <div class="detail-row detail-date">
         <h3>Due Date</h3>
-        <p>${formatDistanceToNow(activeTodo.dueDate)} left.</p>
+        <p>${formatDistanceToNow(activeTodo.due)} left.</p>
       </div>
 
       <div class="detail-row detail-priority">

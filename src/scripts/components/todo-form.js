@@ -1,16 +1,21 @@
-import '../../styles/form.css';
+import '../../styles/todo-form.css';
 
 import { format } from 'date-fns';
 
 export default function todoForm(todo) {
-	return `
-    <form id="add-todo-form" class="add-todo-form hidden" method="dialog">
-      <h2 class="form-title">
+	const form = document.createElement('form');
+	form.method = 'dialog';
+	form.id = 'todo-form';
+	form.classList.add('todo-form');
+
+	form.innerHTML = `
+    <form id="todo-form" class="todo-form" method="dialog">
+      <h2 class="form-header">
         ${todo === undefined ? 'Add todo' : 'Edit todo'}
       </h2>
 
       <div class="form-group">
-        <label for="title" class="form-label">Title</label>
+        <label for="title" class="group-title">Title</label>
         <input
           type="text"
           id="title"
@@ -20,28 +25,53 @@ export default function todoForm(todo) {
       </div>
 
       <div class="form-group">
-        <label for="due-date" class="form-label">Due Date</label>
-        <input
+        <label class="group-title">Due Date</label>
+        <div>
+          <input
           type="date"
-          id="due-date"
-          name="dueDate"
-          value="${todo === undefined ? '' : todo.dueDate}"
+          name="due"
+          value="${
+						todo === undefined ? '' : format(todo.due, 'yyyy-MM-dd')
+					}"
           required />
-      </div>
-
-      <div class="form-group">
-        <label for="priority" class="form-label">Priority</label>
-        <div class="custom-select">
-          <select id="priority" name="priority" class="form-control" required>
-            <option value="0">High</option>
-            <option value="1" selected="true">Medium</option>
-            <option value="2">Low</option>
-          </select>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="description" class="form-label">Description</label>
+        <p class="group-title">Priority</p>
+
+        <div>
+          <label class="radio-control">
+            <input 
+							type="radio" 
+							name="priority" 
+							value="high" 
+							${todo !== undefined && todo.priority === 0 ? 'checked' : ''} />
+            High
+          </label>
+
+          <label class="radio-control">
+            <input 
+							type="radio" 
+							name="priority" 
+							value="medium" 
+							${todo !== undefined && todo.priority === 1 ? 'checked' : ''} />
+            Medium
+          </label>
+
+          <label class="radio-control">
+             <input 
+							type="radio" 
+							name="priority" 
+							value="low" 
+							${todo !== undefined && todo.priority === 2 ? 'checked' : ''} />
+            Low
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description" class="group-title">Description</label>
         <textarea
           id="description"
           name="description"
@@ -50,7 +80,7 @@ export default function todoForm(todo) {
       </div>
 
       <div class="form-group">
-        <label for="notes" class="form-label">Notes</label>
+        <label for="notes" class="group-title">Notes</label>
         <textarea
           id="notes"
           name="notes"
@@ -62,4 +92,6 @@ export default function todoForm(todo) {
         <button type="submit" class="submit-btn">Submit</button>
       </div>
     </form>`;
+
+	return form;
 }

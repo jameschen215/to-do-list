@@ -73,61 +73,6 @@ h1 {
 	border-left: 1px solid #d4d4d8;
 }
 
-/* -------- Custom checkbox styles -------- */
-input[type='checkbox'] {
-	/* Add if not using autoprefixer */
-	-webkit-appearance: none;
-	/* Remove most all native input styles */
-	appearance: none;
-	/* For iOS < 15 */
-	background-color: #fff;
-	/* Not removed via appearance */
-	margin: 0;
-
-	font: inherit;
-	color: currentColor;
-	width: 20px;
-	height: 20px;
-	border: 1px solid #d4d4d8;
-	border-radius: 20px;
-	/* transform: translateY(-0.075em); */
-	cursor: pointer;
-
-	transition: all 200ms ease-in-out;
-
-	display: grid;
-	place-content: center;
-}
-
-input[type='checkbox']:hover {
-	border-color: #0369a1;
-}
-
-input[type='checkbox']::before {
-	content: '';
-	width: 8px;
-	height: 8px;
-	clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-	transform: scale(0);
-	transform-origin: bottom left;
-	transition: 120ms all ease-in-out;
-	background-color: #fff;
-}
-
-input[type='checkbox']:checked::before {
-	transform: scale(1);
-}
-
-input[type='checkbox']:checked {
-	background-color: #71717a;
-	border: none;
-}
-
-input[type='checkbox']:disabled {
-	color: #959495;
-	cursor: not-allowed;
-}
-
 /* ---------------- Style ul list items ---------------- */
 ul li {
 	list-style-type: none;
@@ -167,7 +112,6 @@ ul li {
 		align-self: end;
 	}
 
-	.content-header,
 	.todo-list,
 	.todo-detail {
 		background-color: #fff;
@@ -244,107 +188,3 @@ dialog[open]::backdrop {
 	top: 14px;
 	right: 14px;
 }
-
-/* ---------------- Style form in dialog ---------------- */
-/* Add todo form */
-.add-todo-form,
-.add-project-form {
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-}
-
-.add-project-form {
-	gap: 30px;
-}
-
-.form-group {
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
-
-	label {
-		font-size: 1.4rem;
-		font-weight: 500;
-		text-transform: uppercase;
-	}
-
-	input {
-		outline: none;
-		padding: 8px 12px;
-		border: 1px solid #d4d4d8;
-		border-radius: 4px;
-		font-size: 1.6rem;
-	}
-
-	textarea {
-		outline: none;
-		padding: 8px 12px;
-		border: 1px solid #d4d4d8;
-		border-radius: 4px;
-		font-size: 1.6rem;
-		resize: vertical;
-	}
-
-	input:focus,
-	textarea:focus {
-		border-color: #007bff;
-		/* box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); */
-	}
-
-	.custom-select {
-		position: relative;
-		width: 100%;
-	}
-
-	.custom-select select {
-		appearance: none; /* Remove default arrow */
-		-webkit-appearance: none;
-		-moz-appearance: none;
-		-ms-appearance: none;
-		outline: none;
-
-		width: 100%;
-
-		padding: 8px 12px;
-		border: 1px solid #d4d4d8;
-		border-radius: 4px;
-		font-size: 1.6rem;
-	}
-
-	.custom-select::after {
-		content: '▾';
-		position: absolute;
-		top: 50%;
-		right: 12px;
-		transform: translateY(-50%);
-		pointer-events: none;
-	}
-
-	.custom-select select:focus {
-		border-color: #007bff;
-		box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-	}
-
-	.submit-btn {
-		padding: 8px 12px;
-		border: none;
-		border-radius: 4px;
-		background-color: #0369a1;
-		color: #fff;
-		font-size: 1.6rem;
-		font-weight: 500;
-		cursor: pointer;
-		transition: background-color 200ms ease-in-out;
-	}
-
-	.submit-btn:hover {
-		filter: brightness(1.1);
-	}
-}
-
-/* Add project form */
-
-/* .hidden {
-	display: none;
-} */

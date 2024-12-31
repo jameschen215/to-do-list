@@ -9,88 +9,17 @@ import todoDetail from './components/todo-detail';
 import Todo from './logic/to-do';
 import Project from './logic/project';
 import projectForm from './components/project-form';
+import todoForm from './components/todo-form';
+import { capitalizeFirstLetter } from './utils';
 
 (function displayController() {
-	const app = initializeApp();
-	let activeProject;
-	let activeTodo;
-	let sortBy = 'title';
-	let sortedTodos = [];
-
-	const sidebarDom = document.querySelector('#sidebar');
-	const contentHeaderDom = document.querySelector('#content-header');
-	const todoListDom = document.querySelector('#todo-list');
-	const todoDetailDom = document.querySelector('#todo-detail');
-
-	// dialog and forms
-	const dialogDom = document.querySelector('#form-dialog');
-	const closeButton = document.querySelector('#close-dialog-btn');
-	// const addProjectForm = document.querySelector('#add-project-form');
-	// const addTodoFormDom = document.querySelector('#add-todo-form');
-
-	function updateDisplay() {
-		if (app.projects.length > 0 && activeProject === undefined) {
-			activeProject = app.projects[0];
-		}
-
-		if (activeProject !== undefined) {
-			sortedTodos = activeProject.todos.sort((a, b) => {
-				if (a.completed === b.completed) {
-					if (sortBy === 'title') {
-						return a[sortBy].localeCompare(b[sortBy]);
-					} else {
-						return a[sortBy] - b[sortBy];
-					}
-				}
-
-				return a.completed - b.completed;
-			});
-		}
-
-		if (
-			activeProject !== undefined &&
-			activeProject.todos.length > 0 &&
-			activeTodo === undefined
-		) {
-			activeTodo = activeProject.todos[0];
-		}
-
-		// console.table(activeTodo);
-
-		sidebarDom.innerHTML = sidebar(app.projects, activeProject);
-		contentHeaderDom.innerHTML = contentHeader(activeProject);
-		todoListDom.innerHTML = todoList(sortedTodos, activeTodo);
-
-		if (todoDetail(activeProject, activeTodo) === null) {
-			todoDetailDom.innerHTML = '';
-			todoDetailDom.style.display = 'none';
-		} else {
-			todoDetailDom.style.display = 'block';
-			todoDetailDom.innerHTML = todoDetail(activeProject, activeTodo);
-		}
-
-		handleAddProjectForm();
-		handleEditProjectForm();
-		handleDeleteProject();
-
-		handleProjectClick();
-		handleTodoClick();
-		handleToggleTodos();
-		handleToggleChecklistItem();
-		handleSortByChange();
-		handleDeleteTodo();
-		handleShowAddForm();
-		handleDeleteChecklistItem();
-	}
-
-	updateDisplay();
-
-	/* ======================== Handle sidebar events ======================== */
+	/* ============== Handle project events ============== */
 	// 1. Handle Adding Project
-	function handleAddProjectForm() {
+	function handleAddProject() {
 		document.querySelector('#add-project-btn').addEventListener('click', () => {
 			// 1.1 show form
-			dialogDom.innerHTML = projectForm();
+			const form = projectForm();
+			dialogDom.append(form);
 			dialogDom.showModal();
 
 			// make form control focus
@@ -99,34 +28,29 @@ import projectForm from './components/project-form';
 			}, 0);
 
 			// 1.2 submit form
-			document
-				.querySelector('#project-form')
-				.addEventListener('submit', (event) => {
-					event.preventDefault();
-					const formData = new FormData(event.target);
-					const title = formData.get('project-title');
-					// Check if the title is empty, if yes, return
-					if (title === '') return;
-					// Check if there is any project with the same title existed.
-					const index = app.projects.findIndex(
-						(project) => project.title.toLowerCase() === title.toLowerCase()
-					);
-					// If yes, return;
-					if (index !== -1) return;
-					const newProject = new Project(title);
-					activeProject = newProject;
-					app.projects.push(newProject);
+			form.addEventListener('submit', (event) => {
+				event.preventDefault();
+				const formData = new FormData(event.target);
+				const title = formData.get('project-title');
 
-					// new project has no todo
-					activeTodo = undefined;
+				// TODO: Check if the title is empty
 
-					dialogDom.close();
-				});
+				// TODO: Check if there is any project with the same title existed.
+
+				const newProject = new Project(title);
+				activeProject = newProject;
+				app.projects.push(newProject);
+
+				// new project has no todo
+				activeTodo = undefined;
+
+				dialogDom.close();
+			});
 		});
 	}
 
 	// 2. Handle Editing Project
-	function handleEditProjectForm() {
+	function handleEditProject() {
 		document.querySelectorAll('.edit-project-btn').forEach((button) => {
 			// 2.1 Show form
 			button.addEventListener('click', (event) => {
@@ -137,9 +61,13 @@ import projectForm from './components/project-form';
 					(project) => project.id === projectId
 				);
 
-				if (project === undefined) return;
+				if (project === undefined) {
+					dialogDom.removeChild(form);
+					dialogDom.close();
+				}
 
-				dialogDom.innerHTML = projectForm(project);
+				const form = projectForm(project);
+				dialogDom.appendChild(form);
 				dialogDom.showModal();
 
 				// Make form control focus
@@ -148,32 +76,28 @@ import projectForm from './components/project-form';
 				}, 0);
 
 				// 2.2 Submit form
-				document
-					.querySelector('#project-form')
-					.addEventListener('submit', (event) => {
-						event.preventDefault();
-						const formData = new FormData(event.target);
-						const title = formData.get('project-title');
-						// Check if the title is empty, if yes, return
-						if (title === '') return;
-						// Check if there is any project with the same title existed.
-						const index = app.projects.findIndex(
-							(project) => project.title.toLowerCase() === title.toLowerCase()
-						);
-						// If yes, return;
-						if (index !== -1) return;
-						project.editTitle(title);
+				form.addEventListener('submit', (event) => {
+					event.preventDefault();
 
-						activeProject = project;
+					const formData = new FormData(event.target);
+					const title = formData.get('project-title');
 
-						if (activeProject.todos.length > 0) {
-							activeTodo = activeProject.todos[0];
-						} else {
-							activeTodo = undefined;
-						}
+					// TODO: Check if the title is empty
 
-						dialogDom.close();
-					});
+					// TODO: Check if there is any project with the same title existed.
+
+					project.editTitle(title);
+
+					activeProject = project;
+
+					if (activeProject.todos.length > 0) {
+						activeTodo = activeProject.todos[0];
+					} else {
+						activeTodo = undefined;
+					}
+
+					dialogDom.close();
+				});
 			});
 		});
 	}
@@ -198,6 +122,7 @@ import projectForm from './components/project-form';
 			});
 		});
 	}
+
 	// 4. Handle Choosing Project
 	function handleProjectClick() {
 		document.querySelectorAll('.project').forEach((button) => {
@@ -219,6 +144,92 @@ import projectForm from './components/project-form';
 		});
 	}
 
+	/* ================ Handle todo events ================ */
+	// 1. Handle Adding New Todo
+	function handleAddTodo() {
+		// 1. show form
+		document.querySelector('#add-todo-btn').addEventListener('click', () => {
+			const form = todoForm();
+			dialogDom.appendChild(form);
+			dialogDom.showModal();
+
+			setTimeout(() => {
+				document.querySelector('#title').focus();
+			}, 0);
+
+			form.addEventListener('submit', (event) => {
+				event.preventDefault();
+
+				const formData = new FormData(event.target);
+				const { title, dueDate } = Object.fromEntries(formData.entries());
+
+				// TODO: form validation
+
+				const newTodo = new Todo(Object.fromEntries(formData.entries()));
+				activeProject.todos.push(newTodo);
+				activeTodo = newTodo;
+
+				dialogDom.close();
+			});
+		});
+	}
+
+	// 2. Handle Editing a Todo
+	function handleEditTodo() {
+		// 1. show form
+		document.querySelectorAll('.edit-todo-btn').forEach((todoListItem) =>
+			todoListItem.addEventListener('click', (event) => {
+				event.stopPropagation();
+				console.log('clicked');
+
+				const todoId = parseInt(event.currentTarget.dataset.todoId);
+				const todo = activeProject.todos.find((todo) => todo.id === todoId);
+
+				if (todo === undefined) return;
+
+				const form = todoForm(todo);
+				dialogDom.appendChild(form);
+				dialogDom.showModal();
+
+				setTimeout(() => {
+					document.querySelector('#title').focus();
+				}, 0);
+
+				form.addEventListener('submit', (event) => {
+					event.preventDefault();
+
+					const formData = new FormData(event.target);
+					const { title, dueDate } = Object.fromEntries(formData.entries());
+
+					// TODO: form validation
+
+					todo.editTodo(Object.fromEntries(formData.entries()));
+					activeTodo = todo;
+
+					dialogDom.close();
+				});
+			})
+		);
+	}
+
+	// 3. Handle Deleting a Todo
+	function handleDeleteTodo() {
+		document.querySelectorAll('.delete-todo-btn').forEach((deleteBtn) => {
+			deleteBtn.addEventListener('click', (event) => {
+				event.stopImmediatePropagation();
+
+				const todoId = parseInt(event.currentTarget.dataset.todoId);
+				activeProject.deleteTodo(todoId);
+				if (todoId === activeTodo.id) {
+					activeTodo = activeProject.todos[0];
+				}
+
+				updateDisplay();
+			});
+		});
+	}
+
+	// 3. Handle Todo clicking
 	function handleTodoClick() {
 		document.querySelectorAll('.todo-list-item').forEach((item) => {
 			item.addEventListener('click', (event) => {
@@ -256,6 +267,87 @@ import projectForm from './components/project-form';
 		}
 	}
 
+	function handleSortByChange() {
+		const dropdownTrigger = document.querySelector('.trigger');
+		const dropdown = document.querySelector('#dropdown-sort');
+		const dropdownOptions = document.querySelectorAll('#dropdown-sort .option');
+
+		dropdownTrigger.addEventListener('click', (event) => {
+			event.stopPropagation();
+			// close all other dropdowns
+			[...document.querySelectorAll('.dropdown')]
+				.filter((d) => d !== dropdown)
+				.forEach((dropdown) => {
+					if (!dropdown.classList.contains('hidden')) {
+						dropdown.classList.add('hidden');
+					}
+				});
+			dropdown.classList.toggle('hidden');
+		});
+
+		dropdownOptions.forEach((button) => {
+			button.addEventListener('click', (event) => {
+				const sort = event.currentTarget.dataset.sortBy;
+				dropdownTrigger.textContent = capitalizeFirstLetter(sort);
+				dropdown.classList.add('hidden');
+				sortBy = sort;
+
+				updateDisplay();
+			});
+		});
+
+		// Hide dropdown when clicking outside
+		document.addEventListener('click', () => {
+			if (!dropdown.classList.contains('hidden')) {
+				dropdown.classList.add('hidden');
+			}
+		});
+	}
+
+	function handleToggleAllTodoCompleted() {
+		// TODO:
+		const dropdownTrigger = document.querySelector('#check-trigger');
+		const dropdown = document.querySelector('#dropdown-check');
+		const dropdownOptions = document.querySelectorAll(
+			'#dropdown-check .option'
+		);
+
+		dropdownTrigger.addEventListener('click', (event) => {
+			event.stopPropagation();
+
+			// close all other dropdowns
+			[...document.querySelectorAll('.dropdown')]
+				.filter((d) => d !== dropdown)
+				.forEach((dropdown) => {
+					if (!dropdown.classList.contains('hidden')) {
+						dropdown.classList.add('hidden');
+					}
+				});
+
+			dropdown.classList.toggle('hidden');
+		});
+
+		dropdownOptions.forEach((button) => {
+			button.addEventListener('click', (event) => {
+				if (event.currentTarget.value === 'check-all') {
+					activeProject.makeAllTodosCompleted();
+				} else if (event.currentTarget.value === 'uncheck-all') {
+					activeProject.makeAllTodosIncomplete();
+				}
+
+				dropdown.classList.add('hidden');
+				updateDisplay();
+			});
+		});
+
+		// Hide dropdown when clicking outside
+		document.addEventListener('click', () => {
+			if (!dropdown.classList.contains('hidden')) {
+				dropdown.classList.add('hidden');
+			}
+		});
+	}
+
 	function handleToggleChecklistItem() {
 		const checkboxes = document.querySelectorAll('.done');
 
@@ -268,31 +360,6 @@ import projectForm from './components/project-form';
 					(checklistItem) => checklistItem.id === checklistItemId
 				);
 				checklistItem.toggleDone();
-
-				updateDisplay();
-			});
-		});
-	}
-
-	function handleSortByChange() {
-		document
-			.querySelector('#sort-select')
-			.addEventListener('change', (event) => {
-				sortBy = event.target.value;
-				updateDisplay();
-			});
-	}
-
-	function handleDeleteTodo() {
-		document.querySelectorAll('.delete-todo-btn').forEach((deleteBtn) => {
-			deleteBtn.addEventListener('click', (event) => {
-				event.stopImmediatePropagation();
-
-				const todoId = parseInt(event.currentTarget.dataset.todoId);
-				activeProject.deleteTodo(todoId);
-				if (todoId === activeTodo.id) {
-					activeTodo = activeProject.todos[0];
-				}
 
 				updateDisplay();
 			});
@@ -314,39 +381,85 @@ import projectForm from './components/project-form';
 		});
 	}
 
-	/* ======================== Handle dialog events ======================== */
-	// addTodoFormDom.addEventListener('submit', (event) => {
-	// 	event.preventDefault();
+	function updateDisplay() {
+		if (app.projects.length > 0 && activeProject === undefined) {
+			activeProject = app.projects[0];
+		}
 
-	// 	const formData = new FormData(event.target);
-	// 	const newTodo = new Todo(Object.fromEntries(formData.entries()));
-	// 	activeTodo = newTodo;
-	// 	activeProject.addTodo(newTodo);
+		if (activeProject !== undefined) {
+			sortedTodos = activeProject.todos.sort((a, b) => {
+				if (a.completed === b.completed) {
+					if (sortBy === 'title') {
+						return a[sortBy].localeCompare(b[sortBy]);
+					} else {
+						return a[sortBy] - b[sortBy];
+					}
+				}
 
-	// 	console.table(activeTodo);
+				return a.completed - b.completed;
+			});
+		}
 
-	// 	dialogDom.close();
-	// 	updateDisplay();
-	// });
+		if (activeProject.todos.length > 0 && activeTodo === undefined) {
+			activeTodo = activeProject.todos[0];
+		}
 
+		// console.table('active todo: ', activeTodo.title);
+
+		sidebarDom.innerHTML = sidebar(app.projects, activeProject);
+		contentHeaderDom.innerHTML = contentHeader(activeProject, sortBy);
+		todoListDom.innerHTML = todoList(sortedTodos, activeTodo);
+
+		if (todoDetail(activeProject, activeTodo) === null) {
+			todoDetailDom.innerHTML = '';
+			todoDetailDom.style.display = 'none';
+		} else {
+			todoDetailDom.style.display = 'block';
+			todoDetailDom.innerHTML = todoDetail(activeProject, activeTodo);
+		}
+
+		// project events
+		handleAddProject();
+		handleEditProject();
+		handleDeleteProject();
+		handleProjectClick();
+
+		// todo events
+		handleAddTodo();
+		handleEditTodo();
+		handleDeleteTodo();
+		handleTodoClick();
+		handleToggleTodos();
+		handleSortByChange();
+		handleToggleAllTodoCompleted();
+
+		// handleToggleChecklistItem();
+		// handleDeleteChecklistItem();
+	}
+
+	const sidebarDom = document.querySelector('#sidebar');
+	const contentHeaderDom = document.querySelector('#content-header');
+	const todoListDom = document.querySelector('#todo-list');
+	const todoDetailDom = document.querySelector('#todo-detail');
+	const dialogDom = document.querySelector('#form-dialog');
+	const closeButton = document.querySelector('#close-dialog-btn');
+
+	const app = initializeApp();
+	let activeProject;
+	let activeTodo;
+	let sortBy = 'title';
+	let sortedTodos = [];
+
+	/* =============== Handle dialog closing =============== */
 	closeButton.addEventListener('click', () => {
 		dialogDom.close();
 	});
 
+	// While dialog closing, remove the form in it
 	dialogDom.addEventListener('close', () => {
-		document.querySelector('#project-form').reset();
+		dialogDom.removeChild(dialogDom.lastChild);
 		updateDisplay();
 	});
 
-	/* Add todo event */
-	function handleShowAddForm() {
-		document.querySelector('#add-todo-btn').addEventListener('click', () => {
-			dialogDom.showModal();
-			addTodoFormDom.classList.remove('hidden');
-
-			setTimeout(() => {
-				document.querySelector('#title').focus();
-			}, 0);
-		});
-	}
+	updateDisplay();
 })();
