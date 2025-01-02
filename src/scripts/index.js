@@ -11,6 +11,7 @@ import projectForm from './components/project-form';
 import todoForm from './components/todo-form';
 import { capitalizeFirstLetter } from './utils';
 import projectList from './components/project-list';
+import ChecklistItem from './logic/checklist-item';
 
 (function displayController() {
 	/* ============== Handle project events ============== */
@@ -348,6 +349,53 @@ import projectList from './components/project-list';
 		});
 	}
 
+	/* ================ Handle checklist events ================ */
+	function handleAddChecklistItem() {
+		document
+			.querySelector('.add-checklist-item-btn')
+			.addEventListener('click', () => {
+				const checklistItem = new ChecklistItem('');
+				activeTodo.checklist.push(checklistItem);
+				updateDisplay();
+			});
+	}
+
+	function handleChecklistItemClick() {
+		document
+			.querySelectorAll('.checklist-item input[type="text"]')
+			.forEach((input) => {
+				input.addEventListener('focus', handleFocus);
+				input.addEventListener('keydown', handleKeydown);
+				input.addEventListener('blur', handleBlur);
+
+				function handleFocus(event) {
+					event.target.parentElement.classList.add('active');
+				}
+
+				function handleKeydown(event) {
+					if (event.key === 'Enter' || event.key === 'Escape') {
+						event.target.blur();
+					}
+				}
+
+				function handleBlur(event) {
+					event.target.parentElement.classList.remove('active');
+
+					const checklistItemId = parseInt(
+						event.target.parentElement.id.split('-')[2]
+					);
+					const checklistItem = activeTodo.checklist.find(
+						(checklistItem) => checklistItem.id === checklistItemId
+					);
+
+					if (checklistItem == undefined) return;
+
+					checklistItem.editItem(event.target.value);
+					updateDisplay();
+				}
+			});
+	}
+
 	function handleToggleChecklistItem() {
 		const checkboxes = document.querySelectorAll('.done');
 
@@ -355,12 +403,16 @@ import projectList from './components/project-list';
 
 		checkboxes.forEach((checkbox) => {
 			checkbox.addEventListener('click', (event) => {
-				const checklistItemId = parseInt(event.currentTarget.id);
+				const checklistItemId = parseInt(
+					event.currentTarget.parentElement.id.split('-')[2]
+				);
+
 				const checklistItem = activeTodo.checklist.find(
 					(checklistItem) => checklistItem.id === checklistItemId
 				);
-				checklistItem.toggleDone();
 
+				if (checklistItem === undefined) return;
+				checklistItem.toggleDone();
 				updateDisplay();
 			});
 		});
@@ -370,9 +422,9 @@ import projectList from './components/project-list';
 		document.querySelectorAll('.checklist-item button').forEach((button) => {
 			button.addEventListener('click', (event) => {
 				const checklistItemId = parseInt(
-					event.target.closest('button').dataset.checklistItemId,
-					10
+					event.currentTarget.parentElement.id.split('-')[2]
 				);
+
 				if (isNaN(checklistItemId)) return;
 
 				activeTodo.deleteChecklistItem(checklistItemId);
@@ -475,8 +527,11 @@ import projectList from './components/project-list';
 		handleTodoClick();
 		handleToggleTodos();
 
-		// handleToggleChecklistItem();
-		// handleDeleteChecklistItem();
+		// handle checklist events
+		handleAddChecklistItem();
+		handleChecklistItemClick();
+		handleToggleChecklistItem();
+		handleDeleteChecklistItem();
 	}
 
 	const projectListDom = document.querySelector('#project-list');

@@ -11,13 +11,9 @@ export default function todoDetail(activeProject, activeTodo) {
 		return null;
 	}
 
-	const sortedChecklist = activeTodo.checklist.sort((a, b) => {
-		if (a.done === b.done) {
-			return a.name.localeCompare(b.name);
-		}
-
-		return a.done - b.done;
-	});
+	// const sortedChecklist = activeTodo.checklist.sort((a, b) => {
+	// 	return a.done - b.done;
+	// });
 
 	const priorities = ['High', 'Medium', 'Low'];
 
@@ -36,23 +32,26 @@ export default function todoDetail(activeProject, activeTodo) {
     </div>
   `;
 
-	const checklistHtml = sortedChecklist
+	const checklistHtml = activeTodo.checklist
 		.map(
 			(checklistItem) => `
-        <li class="checklist-item">
-          <label>
-            <input 
-              class="done" 
-              type="checkbox" 
-              name="done" 
-              id="${checklistItem.id}" 
-              ${checklistItem.done ? 'checked' : ''} />
+        <li 
+          class="checklist-item ${checklistItem.name === '' ? 'active' : ''}"  
+          id="checklist-item-${checklistItem.id}" >
 
-              <span>${checklistItem.name}</span>
-          </label>
-           <button 
-            class="icon-btn delete-btn" 
-            data-checklist-item-id="${checklistItem.id}">
+          <input 
+            type="checkbox" 
+            name="done" 
+            autofocus
+            ${checklistItem.done ? 'checked' : ''} />
+
+          <input 
+            type="text" 
+            value="${checklistItem.name}" 
+          />
+
+
+           <button class="icon-btn delete-btn">
             ${DELETE_ICON}
           </button>
         </li>`
@@ -93,7 +92,16 @@ export default function todoDetail(activeProject, activeTodo) {
         <h3>Checklist</h3>
 
         <ul class="checklist">
-          ${activeTodo.checklist.length !== 0 ? checklistHtml : 'No checklist.'}
+          ${activeTodo.checklist.length === 0 ? '' : checklistHtml}
+
+          <li class="checklist-item">
+          <button class="add-checklist-item-btn">
+            <div class="check-icon"></div>
+            <span>
+              Add a new checklist item
+            </span>
+          </button>
+          </li>
         </ul>
       </div>
     </div>

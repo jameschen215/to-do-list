@@ -14,7 +14,10 @@ export function initializeApp() {
 			const newTodo = new Todo(todoData);
 
 			todoData.checklist.forEach((checklistItem) => {
-				const newChecklistItem = new ChecklistItem(checklistItem);
+				const newChecklistItem = new ChecklistItem(
+					checklistItem.name,
+					checklistItem.done
+				);
 				newTodo.checklist.push(newChecklistItem);
 			});
 			project.todos.push(newTodo);

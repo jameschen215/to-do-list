@@ -1,7 +1,7 @@
 let nextId = 1;
 
 export default class ChecklistItem {
-	constructor({ name, done = false }) {
+	constructor(name, done = false) {
 		this.id = nextId++;
 		this.name = name;
 		this.done = done;
@@ -9,6 +9,7 @@ export default class ChecklistItem {
 	}
 
 	editItem(name) {
+		if (name.trim() === '') return;
 		this.name = name;
 	}
 

@@ -1,5 +1,3 @@
-import ChecklistItem from './checklist-item';
-
 let nextId = 1;
 
 export default class Todo {
@@ -40,9 +38,9 @@ export default class Todo {
 		this.updatedDate = new Date();
 	}
 
-	addChecklistItem(name, done) {
-		this.checklist.push(new ChecklistItem(name, done));
-	}
+	// addChecklistItem(name, done) {
+	// 	this.checklist.push(new ChecklistItem(name, done));
+	// }
 
 	editChecklistItem(checklistItemId, name) {
 		const item = this.checklist.find(
