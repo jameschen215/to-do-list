@@ -29,11 +29,11 @@ export default class Todo {
 		}
 	}
 
-	editTodo({ title, due, priority, projectId, completed, description, notes }) {
+	editTodo({ title, due, priority, completed, description, notes }) {
 		this.title = title;
 		this.due = due;
-		this.priority = priority;
-		this.projectId = projectId;
+		this.priority = parseInt(priority, 10);
+		// this.projectId = projectId;
 		this.completed = completed;
 		this.description = description;
 		this.notes = notes;

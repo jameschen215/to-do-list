@@ -8,7 +8,37 @@
 	<body>
 		<div class="container">
 			<!-- Sidebar -->
-			<aside id="sidebar" class="sidebar"></aside>
+			<aside class="sidebar">
+				<button class="user">
+					<div class="avatar">A</div>
+					<span class="username">James</span>
+				</button>
+
+				<div class="projects-container">
+					<div class="project-header">
+						<h3>My Projects</h3>
+
+						<button id="add-project-btn" class="icon-btn">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								class="lucide lucide-plus">
+								<path d="M5 12h14" />
+								<path d="M12 5v14" />
+							</svg>
+						</button>
+					</div>
+
+					<ul id="project-list" class="project-list"></ul>
+				</div>
+			</aside>
 
 			<div id="content" class="content">
 				<!-- Content header -->

@@ -1,13 +1,10 @@
-import '../../styles/sidebar.css';
-import {
-	capitalizeFirstLetter,
-	PLUS_ICON,
-	EDIT_ICON,
-	DELETE_ICON,
-} from '../utils';
+import '../../styles/project-list.css';
+import { capitalizeFirstLetter, EDIT_ICON, DELETE_ICON } from '../utils';
 
-export default function sidebar(projects, activeProject) {
-	const projectsHtml = projects
+export default function projectList(projects, activeProject) {
+	if (projects.length === 0) return null;
+
+	const projectListHtml = projects
 		.map(
 			(project) => `
       <li
@@ -37,24 +34,5 @@ export default function sidebar(projects, activeProject) {
 		)
 		.join('');
 
-	return `
-    <button class="user">
-			<div class="avatar">A</div>
-			<span class="username">James</span>
-		</button>
-
-		<div class="projects-container">
-			<div class="project-header">
-				<h3>My Projects</h3>
-
-        <button id="add-project-btn" class="icon-btn">
-          ${PLUS_ICON}
-        </button>
-			</div>
-
-      <ul class="projects">
-        ${projectsHtml}
-      </ul>
-    </div>
-  `;
+	return projectListHtml;
 }

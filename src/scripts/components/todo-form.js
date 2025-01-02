@@ -30,9 +30,7 @@ export default function todoForm(todo) {
           <input
           type="date"
           name="due"
-          value="${
-						todo === undefined ? '' : format(todo.due, 'yyyy-MM-dd')
-					}"
+          value="${todo === undefined ? '' : format(todo.due, 'yyyy-MM-dd')}"
           required />
         </div>
       </div>
@@ -45,7 +43,7 @@ export default function todoForm(todo) {
             <input 
 							type="radio" 
 							name="priority" 
-							value="high" 
+							value="0" 
 							${todo !== undefined && todo.priority === 0 ? 'checked' : ''} />
             High
           </label>
@@ -54,8 +52,13 @@ export default function todoForm(todo) {
             <input 
 							type="radio" 
 							name="priority" 
-							value="medium" 
-							${todo !== undefined && todo.priority === 1 ? 'checked' : ''} />
+							value="1" 
+							${
+								(todo !== undefined && todo.priority === 1) ||
+								todo === undefined
+									? 'checked'
+									: ''
+							} />
             Medium
           </label>
 
@@ -63,7 +66,7 @@ export default function todoForm(todo) {
              <input 
 							type="radio" 
 							name="priority" 
-							value="low" 
+							value="2" 
 							${todo !== undefined && todo.priority === 2 ? 'checked' : ''} />
             Low
           </label>
@@ -75,8 +78,7 @@ export default function todoForm(todo) {
         <textarea
           id="description"
           name="description"
-          value="${todo === undefined ? '' : todo.description}"
-          rows="2"></textarea>
+          rows="2">${todo === undefined ? '' : todo.description}</textarea>
       </div>
 
       <div class="form-group">
@@ -84,8 +86,7 @@ export default function todoForm(todo) {
         <textarea
           id="notes"
           name="notes"
-          value="${todo === undefined ? '' : todo.notes}"
-          rows="2"></textarea>
+          rows="2">${todo === undefined ? '' : todo.notes}</textarea>
       </div>
 
       <div class="form-group">

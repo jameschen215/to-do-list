@@ -2,7 +2,6 @@ import '../styles/reset.css';
 import '../styles/main.css';
 
 import { initializeApp } from './logic/initialize-app';
-import sidebar from './components/sidebar';
 import contentHeader from './components/content-header';
 import todoList from './components/todo-list';
 import todoDetail from './components/todo-detail';
@@ -11,6 +10,7 @@ import Project from './logic/project';
 import projectForm from './components/project-form';
 import todoForm from './components/todo-form';
 import { capitalizeFirstLetter } from './utils';
+import projectList from './components/project-list';
 
 (function displayController() {
 	/* ============== Handle project events ============== */
@@ -161,13 +161,13 @@ import { capitalizeFirstLetter } from './utils';
 				event.preventDefault();
 
 				const formData = new FormData(event.target);
-				const { title, dueDate } = Object.fromEntries(formData.entries());
 
 				// TODO: form validation
 
 				const newTodo = new Todo(Object.fromEntries(formData.entries()));
 				activeProject.todos.push(newTodo);
 				activeTodo = newTodo;
+				console.log(Object.fromEntries(formData.entries()));
 
 				dialogDom.close();
 			});
@@ -400,44 +400,86 @@ import { capitalizeFirstLetter } from './utils';
 			});
 		}
 
-		if (activeProject.todos.length > 0 && activeTodo === undefined) {
+		if (
+			activeProject !== undefined &&
+			activeProject.todos.length > 0 &&
+			activeTodo === undefined
+		) {
 			activeTodo = activeProject.todos[0];
 		}
 
-		// console.table('active todo: ', activeTodo.title);
+		// get page content
+		const projectListHtml = projectList(app.projects, activeProject);
+		const contentHeaderHtml = contentHeader(activeProject, sortBy);
+		const todoListHtml = todoList(sortedTodos, activeTodo);
+		const todoDetailHtml = todoDetail(activeProject, activeTodo);
 
-		sidebarDom.innerHTML = sidebar(app.projects, activeProject);
-		contentHeaderDom.innerHTML = contentHeader(activeProject, sortBy);
-		todoListDom.innerHTML = todoList(sortedTodos, activeTodo);
-
-		if (todoDetail(activeProject, activeTodo) === null) {
-			todoDetailDom.innerHTML = '';
+		// if no project exists or no active project exists,
+		if (projectListHtml === null || contentHeaderHtml === null) {
+			// don't display content section
+			contentHeaderDom.style.display = 'none';
+			todoListDom.style.display = 'none';
 			todoDetailDom.style.display = 'none';
-		} else {
-			todoDetailDom.style.display = 'block';
-			todoDetailDom.innerHTML = todoDetail(activeProject, activeTodo);
 		}
 
-		// project events
-		handleAddProject();
+		// get project list in sidebar and make it visible
+		projectListDom.innerHTML = projectListHtml;
+		projectListDom.style.display = 'flex';
+
+		// if active project exists
+		if (contentHeaderHtml !== null) {
+			// get content header and buttons in header, and make them visible
+			contentHeaderDom.innerHTML = contentHeaderHtml;
+			contentHeaderDom.style.display = 'flex';
+
+			// add event listeners to these buttons
+			handleAddTodo();
+			handleSortByChange();
+			handleToggleAllTodoCompleted();
+
+			// if active project has any todo item
+			if (todoListHtml !== null) {
+				// get todos and make them visible
+				todoListDom.innerHTML = todoListHtml;
+				todoListDom.style.display = 'flex';
+
+				// and if there is active todo, make it visible in detail section
+				if (todoDetailHtml !== null) {
+					todoDetailDom.innerHTML = todoDetailHtml;
+					todoDetailDom.style.display = 'block';
+				} else {
+					// otherwise, make detail section invisible
+					todoDetailDom.style.display = 'none';
+				}
+			} else {
+				// if there is no todo in active project, tell the user how to add one
+				todoListDom.innerHTML = `
+					<h4 style="text-align: center; margin-top: 30px;">No todo yet</h4>
+					<p style="text-align: center;">Click + to add todo.</p>
+				`;
+
+				// and make detail section invisible
+				todoDetailDom.style.display = 'none';
+			}
+		}
+
+		// handle dynamic html element events
+		// handle project events
 		handleEditProject();
 		handleDeleteProject();
 		handleProjectClick();
 
-		// todo events
-		handleAddTodo();
+		// handle todo events
 		handleEditTodo();
 		handleDeleteTodo();
 		handleTodoClick();
 		handleToggleTodos();
-		handleSortByChange();
-		handleToggleAllTodoCompleted();
 
 		// handleToggleChecklistItem();
 		// handleDeleteChecklistItem();
 	}
 
-	const sidebarDom = document.querySelector('#sidebar');
+	const projectListDom = document.querySelector('#project-list');
 	const contentHeaderDom = document.querySelector('#content-header');
 	const todoListDom = document.querySelector('#todo-list');
 	const todoDetailDom = document.querySelector('#todo-detail');
@@ -450,7 +492,11 @@ import { capitalizeFirstLetter } from './utils';
 	let sortBy = 'title';
 	let sortedTodos = [];
 
-	/* =============== Handle dialog closing =============== */
+	updateDisplay();
+
+	/* =========== handle static html element events =========== */
+	handleAddProject();
+
 	closeButton.addEventListener('click', () => {
 		dialogDom.close();
 	});
@@ -460,6 +506,4 @@ import { capitalizeFirstLetter } from './utils';
 		dialogDom.removeChild(dialogDom.lastChild);
 		updateDisplay();
 	});
-
-	updateDisplay();
 })();

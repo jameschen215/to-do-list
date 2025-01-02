@@ -36,7 +36,7 @@
 }
 
 .trigger:hover {
-	color: #0369a1;
+	color: var(--primary);
 }
 
 .sort-icon {
@@ -69,7 +69,7 @@
 	width: 100%;
 	padding: 6px 30px;
 	border: none;
-	border-top: 1px solid #e4e4e7;
+	border-top: 1px solid var(--gray-200);
 	text-align: start;
 	background-color: transparent;
 	outline: none;
@@ -79,7 +79,7 @@
 }
 
 .option:hover {
-	color: #0369a1;
+	color: var(--primary);
 }
 
 .content-header .hidden {

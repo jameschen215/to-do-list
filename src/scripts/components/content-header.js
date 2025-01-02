@@ -7,6 +7,8 @@ import {
 } from '../utils';
 
 export default function contentHeader(activeProject, sortBy) {
+	if (activeProject === undefined) return null;
+
 	return `
 	  <h1 class="project-title">${capitalizeFirstLetter(activeProject.title)}</h1>
 	    

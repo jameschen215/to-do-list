@@ -20,7 +20,7 @@
 .todo-form .form-group textarea {
 	outline: none;
 	padding: 8px 12px;
-	border: 1px solid #d4d4d8;
+	border: 1px solid var(--gray-300);
 	border-radius: 4px;
 	font-size: 1.6rem;
 }
@@ -31,7 +31,7 @@
 
 .todo-form .form-group input:not(input[type='radio']):focus,
 .todo-form .form-group textarea:focus {
-	border-color: #007bff;
+	border-color: var(--primary);
 }
 
 /* Style radio buttons */
@@ -62,7 +62,7 @@
 	color: inherit;
 	width: 16px;
 	height: 16px;
-	border: 1px solid #777;
+	border: 1px solid var(--gray-400);
 	border-radius: 50%;
 	cursor: pointer;
 	position: relative;
@@ -82,7 +82,7 @@
 	border-radius: 50%;
 	transform: translate(-50%, -50%);
 	transition: 120ms opacity ease-in-out;
-	background-color: #555;
+	background-color: var(--gray-700);
 	opacity: 0;
 }
 
@@ -95,7 +95,7 @@
 	padding: 8px 12px;
 	border: none;
 	border-radius: 4px;
-	background-color: #0369a1;
+	background-color: var(--primary);
 	color: #fff;
 	font-size: 1.6rem;
 	font-weight: 500;
