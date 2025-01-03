@@ -31,16 +31,11 @@ export default class Todo {
 		this.title = title;
 		this.due = due;
 		this.priority = parseInt(priority, 10);
-		// this.projectId = projectId;
 		this.completed = completed;
 		this.description = description;
 		this.notes = notes;
 		this.updatedDate = new Date();
 	}
-
-	// addChecklistItem(name, done) {
-	// 	this.checklist.push(new ChecklistItem(name, done));
-	// }
 
 	editChecklistItem(checklistItemId, name) {
 		const item = this.checklist.find(

@@ -2,7 +2,7 @@ import App from './app';
 import Project from './project';
 import Todo from './to-do';
 import ChecklistItem from './checklist-item';
-import { INITIAL_PROJECTS } from './initial-projects';
+import { INITIAL_PROJECTS } from '../initial-projects';
 
 export function initializeApp() {
 	const app = new App();
@@ -26,7 +26,28 @@ export function initializeApp() {
 		app.projects.push(project);
 	});
 
-	app.printProjects();
+	localStorage.setItem('app', JSON.stringify(app));
 
+	return app;
+}
+
+// Function to re-instantiate an App object after deserialization
+export function rehydrateApp(serializedApp) {
+	const app = new App();
+	app.projects = serializedApp.projects.map((projectData) => {
+		const project = new Project(projectData.title);
+
+		project.todos = projectData.todos.map((todoData) => {
+			const todo = new Todo(todoData);
+			todo.checklist = todoData.checklist.map((checklistItemData) => {
+				return new ChecklistItem(
+					checklistItemData.name,
+					checklistItemData.done
+				);
+			});
+			return todo;
+		});
+		return project;
+	});
 	return app;
 }

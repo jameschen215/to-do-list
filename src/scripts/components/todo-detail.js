@@ -11,10 +11,6 @@ export default function todoDetail(activeProject, activeTodo) {
 		return null;
 	}
 
-	// const sortedChecklist = activeTodo.checklist.sort((a, b) => {
-	// 	return a.done - b.done;
-	// });
-
 	const priorities = ['High', 'Medium', 'Low'];
 
 	const headerHtml = `
@@ -42,7 +38,7 @@ export default function todoDetail(activeProject, activeTodo) {
           <input 
             type="checkbox" 
             name="done" 
-            autofocus
+
             ${checklistItem.done ? 'checked' : ''} />
 
           <input 
@@ -94,13 +90,13 @@ export default function todoDetail(activeProject, activeTodo) {
         <ul class="checklist">
           ${activeTodo.checklist.length === 0 ? '' : checklistHtml}
 
-          <li class="checklist-item">
-          <button class="add-checklist-item-btn">
-            <div class="check-icon"></div>
-            <span>
-              Add a new checklist item
-            </span>
-          </button>
+          <li class="checklist-item add-checklist-item-btn">
+            <button>
+              <div class="check-icon"></div>
+              <span>
+                Add a new checklist item
+              </span>
+            </button>
           </li>
         </ul>
       </div>

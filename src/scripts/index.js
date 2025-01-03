@@ -1,17 +1,19 @@
 import '../styles/reset.css';
 import '../styles/main.css';
 
-import { initializeApp } from './logic/initialize-app';
-import contentHeader from './components/content-header';
-import todoList from './components/todo-list';
-import todoDetail from './components/todo-detail';
+import { initializeApp, rehydrateApp } from './logic/initialize-app';
+import { capitalizeFirstLetter } from './utils';
+
 import Todo from './logic/to-do';
 import Project from './logic/project';
-import projectForm from './components/project-form';
-import todoForm from './components/todo-form';
-import { capitalizeFirstLetter } from './utils';
-import projectList from './components/project-list';
 import ChecklistItem from './logic/checklist-item';
+
+import todoList from './components/todo-list';
+import todoForm from './components/todo-form';
+import projectList from './components/project-list';
+import projectForm from './components/project-form';
+import todoDetail from './components/todo-detail';
+import contentHeader from './components/content-header';
 
 (function displayController() {
 	/* ============== Handle project events ============== */
@@ -41,6 +43,7 @@ import ChecklistItem from './logic/checklist-item';
 				const newProject = new Project(title);
 				activeProject = newProject;
 				app.projects.push(newProject);
+				localStorage.setItem('app', JSON.stringify(app));
 
 				// new project has no todo
 				activeTodo = undefined;
@@ -97,6 +100,7 @@ import ChecklistItem from './logic/checklist-item';
 						activeTodo = undefined;
 					}
 
+					localStorage.setItem('app', JSON.stringify(app));
 					dialogDom.close();
 				});
 			});
@@ -118,6 +122,7 @@ import ChecklistItem from './logic/checklist-item';
 					activeProject = undefined;
 				}
 
+				localStorage.setItem('app', JSON.stringify(app));
 				updateDisplay();
 				console.log(`Project width ID ${projectId} has been eliminated.`);
 			});
@@ -170,6 +175,8 @@ import ChecklistItem from './logic/checklist-item';
 				activeTodo = newTodo;
 				console.log(Object.fromEntries(formData.entries()));
 
+				localStorage.setItem('app', JSON.stringify(app));
+
 				dialogDom.close();
 			});
 		});
@@ -207,6 +214,8 @@ import ChecklistItem from './logic/checklist-item';
 					todo.editTodo(Object.fromEntries(formData.entries()));
 					activeTodo = todo;
 
+					localStorage.setItem('app', JSON.stringify(app));
+
 					dialogDom.close();
 				});
 			})
@@ -225,6 +234,7 @@ import ChecklistItem from './logic/checklist-item';
 					activeTodo = activeProject.todos[0];
 				}
 
+				localStorage.setItem('app', JSON.stringify(app));
 				updateDisplay();
 			});
 		});
@@ -255,6 +265,7 @@ import ChecklistItem from './logic/checklist-item';
 					const todo = activeProject.todos.find((todo) => todo.id === todoId);
 					todo.toggleCompleted();
 
+					localStorage.setItem('app', JSON.stringify(app));
 					updateDisplay();
 				});
 			});
@@ -336,6 +347,8 @@ import ChecklistItem from './logic/checklist-item';
 					activeProject.makeAllTodosIncomplete();
 				}
 
+				localStorage.setItem('app', JSON.stringify(app));
+
 				dropdown.classList.add('hidden');
 				updateDisplay();
 			});
@@ -349,50 +362,86 @@ import ChecklistItem from './logic/checklist-item';
 		});
 	}
 
-	/* ================ Handle checklist events ================ */
+	/* ============== Handle checklist events ============== */
 	function handleAddChecklistItem() {
-		document
-			.querySelector('.add-checklist-item-btn')
-			.addEventListener('click', () => {
-				const checklistItem = new ChecklistItem('');
+		const addChecklistItemBtn = document.querySelector(
+			'.add-checklist-item-btn'
+		);
+		addChecklistItemBtn.addEventListener('click', () => {
+			const ul = document.querySelector('.checklist');
+
+			const li = document.createElement('li');
+			li.classList.add('checklist-item');
+			li.classList.add('editing');
+
+			const checkIcon = document.createElement('div');
+			checkIcon.classList.add('check-icon');
+
+			const input = document.createElement('input');
+			input.type = 'text';
+
+			li.appendChild(checkIcon);
+			li.appendChild(input);
+			ul.insertBefore(li, ul.lastElementChild);
+			input.focus();
+
+			// Handle input
+			input.addEventListener('blur', (event) => {
+				const text = event.currentTarget.value;
+
+				if (text === '') {
+					updateDisplay();
+					return;
+				}
+
+				const checklistItem = new ChecklistItem(event.currentTarget.value);
 				activeTodo.checklist.push(checklistItem);
+
+				localStorage.setItem('app', JSON.stringify(app));
 				updateDisplay();
 			});
+
+			input.addEventListener('keydown', (event) => {
+				if (event.key === 'Enter' || event.key === 'Escape') {
+					event.currentTarget.blur();
+				}
+			});
+		});
 	}
 
 	function handleChecklistItemClick() {
 		document
 			.querySelectorAll('.checklist-item input[type="text"]')
 			.forEach((input) => {
-				input.addEventListener('focus', handleFocus);
-				input.addEventListener('keydown', handleKeydown);
-				input.addEventListener('blur', handleBlur);
+				input.addEventListener('focus', () => {
+					input.parentElement.classList.add('editing');
+				});
 
-				function handleFocus(event) {
-					event.target.parentElement.classList.add('active');
-				}
+				input.addEventListener('blur', () => {
+					input.parentElement.classList.remove('editing');
+				});
 
-				function handleKeydown(event) {
+				input.addEventListener('keydown', (event) => {
 					if (event.key === 'Enter' || event.key === 'Escape') {
-						event.target.blur();
+						input.blur();
 					}
-				}
+				});
 
-				function handleBlur(event) {
-					event.target.parentElement.classList.remove('active');
-
+				input.addEventListener('input', (event) => {
 					const checklistItemId = parseInt(
-						event.target.parentElement.id.split('-')[2]
+						event.currentTarget.parentElement.id.split('-')[2]
 					);
+
 					const checklistItem = activeTodo.checklist.find(
 						(checklistItem) => checklistItem.id === checklistItemId
 					);
 
-					if (checklistItem == undefined) return;
+					if (checklistItem === undefined) return;
 
-					checklistItem.editItem(event.target.value);
-					updateDisplay();
-				}
+					checklistItem.name = event.currentTarget.value;
+
+					localStorage.setItem('app', JSON.stringify(app));
+				});
 			});
 	}
 
@@ -403,6 +452,7 @@ import ChecklistItem from './logic/checklist-item';
 
 		checkboxes.forEach((checkbox) => {
 			checkbox.addEventListener('click', (event) => {
+				event.stopPropagation();
 				const checklistItemId = parseInt(
 					event.currentTarget.parentElement.id.split('-')[2]
 				);
@@ -413,6 +463,8 @@ import ChecklistItem from './logic/checklist-item';
 
 				if (checklistItem === undefined) return;
 				checklistItem.toggleDone();
+
+				localStorage.setItem('app', JSON.stringify(app));
 				updateDisplay();
 			});
 		});
@@ -427,12 +479,18 @@ import ChecklistItem from './logic/checklist-item';
 
 				if (isNaN(checklistItemId)) return;
 
+				console.log(checklistItemId);
+				console.log(activeTodo);
+
 				activeTodo.deleteChecklistItem(checklistItemId);
+
+				localStorage.setItem('app', JSON.stringify(app));
 				updateDisplay();
 			});
 		});
 	}
 
+	/* =================== Update display =================== */
 	function updateDisplay() {
 		if (app.projects.length > 0 && activeProject === undefined) {
 			activeProject = app.projects[0];
@@ -534,6 +592,7 @@ import ChecklistItem from './logic/checklist-item';
 		handleDeleteChecklistItem();
 	}
 
+	/* ============== Get static html elements ============== */
 	const projectListDom = document.querySelector('#project-list');
 	const contentHeaderDom = document.querySelector('#content-header');
 	const todoListDom = document.querySelector('#todo-list');
@@ -541,17 +600,18 @@ import ChecklistItem from './logic/checklist-item';
 	const dialogDom = document.querySelector('#form-dialog');
 	const closeButton = document.querySelector('#close-dialog-btn');
 
-	const app = initializeApp();
-	let activeProject;
-	let activeTodo;
+	/* =================== Initialize app =================== */
+	const app = localStorage.getItem('app')
+		? rehydrateApp(JSON.parse(localStorage.getItem('app')))
+		: initializeApp();
+	let activeProject = app.projects[0] ?? undefined;
+	let activeTodo = activeProject.todos[0] ?? undefined;
 	let sortBy = 'title';
 	let sortedTodos = [];
 
 	updateDisplay();
 
 	/* =========== handle static html element events =========== */
-	handleAddProject();
-
 	closeButton.addEventListener('click', () => {
 		dialogDom.close();
 	});
@@ -561,4 +621,6 @@ import ChecklistItem from './logic/checklist-item';
 		dialogDom.removeChild(dialogDom.lastChild);
 		updateDisplay();
 	});
+
+	handleAddProject();
 })();

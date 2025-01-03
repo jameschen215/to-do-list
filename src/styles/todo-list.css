@@ -93,22 +93,17 @@
 
 /* -------- Custom checkbox styles -------- */
 input[type='checkbox'] {
-	/* Add if not using autoprefixer */
-	-webkit-appearance: none;
-	/* Remove most all native input styles */
 	appearance: none;
-	/* For iOS < 15 */
 	background-color: #fff;
-	/* Not removed via appearance */
 	margin: 0;
 
 	font: inherit;
 	color: currentColor;
 	width: 20px;
 	height: 20px;
+	outline: none;
 	border: 1px solid var(--gray-300);
 	border-radius: 20px;
-	/* transform: translateY(-0.075em); */
 	cursor: pointer;
 
 	transition: all 200ms ease-in-out;

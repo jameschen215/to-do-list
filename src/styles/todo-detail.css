@@ -65,20 +65,18 @@
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
+}
+.detail-row {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
 
-	.detail-row {
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-
-		.checklist {
-			margin-left: 4px;
-			margin-top: 10px;
-			display: flex;
-			flex-direction: column;
-			gap: 10px;
-		}
-	}
+.checklist {
+	margin-left: 4px;
+	margin-top: 10px;
+	display: flex;
+	flex-direction: column;
 }
 
 .detail-content.completed {
@@ -108,7 +106,7 @@
 	transition: color 120ms ease-in-out;
 }
 
-.checklist-item.active {
+.checklist-item.editing {
 	border-color: var(--primary);
 }
 
@@ -125,7 +123,7 @@
 	cursor: pointer;
 }
 
-.add-checklist-item-btn {
+.add-checklist-item-btn button {
 	display: flex;
 	align-items: center;
 	gap: 10px;
@@ -136,7 +134,11 @@
 	cursor: pointer;
 }
 
-.add-checklist-item-btn:hover {
+.checklist-item.add-checklist-item-btn:hover {
+	background-color: transparent;
+	box-shadow: none;
+}
+.checklist-item.add-checklist-item-btn:hover button {
 	color: var(--gray-500);
 }
 
