@@ -25,10 +25,13 @@ import contentHeader from './components/content-header';
 			dialogDom.append(form);
 			dialogDom.showModal();
 
-			// make form control focus
+			// make input focus
 			setTimeout(() => {
-				document.querySelector('#project-title').focus();
-			}, 0);
+				const input = document.querySelector('#project-title');
+				if (input !== null) {
+					input.focus();
+				}
+			}, 100);
 
 			// 1.2 submit form
 			form.addEventListener('submit', (event) => {
@@ -74,10 +77,14 @@ import contentHeader from './components/content-header';
 				dialogDom.appendChild(form);
 				dialogDom.showModal();
 
-				// Make form control focus
+				// make input focus and the cursor at the end of the text
 				setTimeout(() => {
-					document.querySelector('#project-title').focus();
-				}, 0);
+					const input = document.querySelector('#project-title');
+					if (input !== null) {
+						input.focus();
+						input.setSelectionRange(input.value.length, input.value.length);
+					}
+				}, 100);
 
 				// 2.2 Submit form
 				form.addEventListener('submit', (event) => {
@@ -160,8 +167,11 @@ import contentHeader from './components/content-header';
 			dialogDom.showModal();
 
 			setTimeout(() => {
-				document.querySelector('#title').focus();
-			}, 0);
+				const input = document.querySelector('#title');
+				if (input !== null) {
+					input.focus();
+				}
+			}, 100);
 
 			form.addEventListener('submit', (event) => {
 				event.preventDefault();
@@ -190,7 +200,9 @@ import contentHeader from './components/content-header';
 				event.stopPropagation();
 				console.log('clicked');
 
-				const todoId = parseInt(event.currentTarget.dataset.todoId);
+				const todoId = parseInt(
+					event.currentTarget.parentElement.parentElement.id.split('-')[1]
+				);
 				const todo = activeProject.todos.find((todo) => todo.id === todoId);
 
 				if (todo === undefined) return;
@@ -199,15 +211,19 @@ import contentHeader from './components/content-header';
 				dialogDom.appendChild(form);
 				dialogDom.showModal();
 
+				// make input focus and the cursor at the end of the text
 				setTimeout(() => {
-					document.querySelector('#title').focus();
-				}, 0);
+					const input = document.querySelector('#title');
+					if (input !== null) {
+						input.focus();
+						input.setSelectionRange(input.value.length, input.value.length);
+					}
+				}, 100);
 
 				form.addEventListener('submit', (event) => {
 					event.preventDefault();
 
 					const formData = new FormData(event.target);
-					const { title, dueDate } = Object.fromEntries(formData.entries());
 
 					// TODO: form validation
 
@@ -228,7 +244,9 @@ import contentHeader from './components/content-header';
 			deleteBtn.addEventListener('click', (event) => {
 				event.stopImmediatePropagation();
 
-				const todoId = parseInt(event.currentTarget.dataset.todoId);
+				const todoId = parseInt(
+					event.currentTarget.parentElement.parentElement.id.split('-')[1]
+				);
 				activeProject.deleteTodo(todoId);
 				if (todoId === activeTodo.id) {
 					activeTodo = activeProject.todos[0];
@@ -240,11 +258,11 @@ import contentHeader from './components/content-header';
 		});
 	}
 
-	// 3. Handle Todo clicking
+	// 4. Handle Todo clicking
 	function handleTodoClick() {
 		document.querySelectorAll('.todo-list-item').forEach((item) => {
 			item.addEventListener('click', (event) => {
-				const todoId = parseInt(event.currentTarget.dataset.todoId);
+				const todoId = parseInt(event.currentTarget.id.split('-')[1]);
 				activeTodo = activeProject.todos.find((todo) => todo.id === todoId);
 
 				updateDisplay();
@@ -252,33 +270,7 @@ import contentHeader from './components/content-header';
 		});
 	}
 
-	function handleToggleTodos() {
-		const checkboxes = document.querySelectorAll('.completed-input');
-		const toggleBtn = document.querySelector('.toggle-complete-btn');
-
-		if (checkboxes.length !== 0) {
-			checkboxes.forEach((checkbox) => {
-				checkbox.addEventListener('click', (event) => {
-					event.stopImmediatePropagation();
-
-					const todoId = parseInt(event.currentTarget.id);
-					const todo = activeProject.todos.find((todo) => todo.id === todoId);
-					todo.toggleCompleted();
-
-					localStorage.setItem('app', JSON.stringify(app));
-					updateDisplay();
-				});
-			});
-		}
-
-		if (toggleBtn !== null) {
-			toggleBtn.addEventListener('click', () => {
-				activeTodo.toggleCompleted();
-				updateDisplay();
-			});
-		}
-	}
-
+	// 5. Handle Sort By Change
 	function handleSortByChange() {
 		const dropdownTrigger = document.querySelector('.trigger');
 		const dropdown = document.querySelector('#dropdown-sort');
@@ -316,6 +308,35 @@ import contentHeader from './components/content-header';
 		});
 	}
 
+	// 6. Handle Toggle Todo Completed
+	function handleToggleTodos() {
+		const checkboxes = document.querySelectorAll('.completed-input');
+		const toggleBtn = document.querySelector('.toggle-completed-btn');
+
+		if (checkboxes.length !== 0) {
+			checkboxes.forEach((checkbox) => {
+				checkbox.addEventListener('click', (event) => {
+					event.stopImmediatePropagation();
+
+					const todoId = parseInt(event.currentTarget.id);
+					const todo = activeProject.todos.find((todo) => todo.id === todoId);
+					todo.toggleCompleted();
+
+					localStorage.setItem('app', JSON.stringify(app));
+					updateDisplay();
+				});
+			});
+		}
+
+		if (toggleBtn !== null) {
+			toggleBtn.addEventListener('click', () => {
+				activeTodo.toggleCompleted();
+				updateDisplay();
+			});
+		}
+	}
+
+	// 7. Handle Toggle All Todo Completed
 	function handleToggleAllTodoCompleted() {
 		// TODO:
 		const dropdownTrigger = document.querySelector('#check-trigger');
@@ -363,9 +384,10 @@ import contentHeader from './components/content-header';
 	}
 
 	/* ============== Handle checklist events ============== */
+	// 1. Handle Add Checklist Item
 	function handleAddChecklistItem() {
 		const addChecklistItemBtn = document.querySelector(
-			'.add-checklist-item-btn'
+			'.button-container button'
 		);
 		addChecklistItemBtn.addEventListener('click', () => {
 			const ul = document.querySelector('.checklist');
@@ -409,42 +431,42 @@ import contentHeader from './components/content-header';
 		});
 	}
 
+	// 2. Handle Checklist Item Click
 	function handleChecklistItemClick() {
-		document
-			.querySelectorAll('.checklist-item input[type="text"]')
-			.forEach((input) => {
-				input.addEventListener('focus', () => {
-					input.parentElement.classList.add('editing');
-				});
-
-				input.addEventListener('blur', () => {
-					input.parentElement.classList.remove('editing');
-				});
-
-				input.addEventListener('keydown', (event) => {
-					if (event.key === 'Enter' || event.key === 'Escape') {
-						input.blur();
-					}
-				});
-
-				input.addEventListener('input', (event) => {
-					const checklistItemId = parseInt(
-						event.currentTarget.parentElement.id.split('-')[2]
-					);
-
-					const checklistItem = activeTodo.checklist.find(
-						(checklistItem) => checklistItem.id === checklistItemId
-					);
-
-					if (checklistItem === undefined) return;
-
-					checklistItem.name = event.currentTarget.value;
-
-					localStorage.setItem('app', JSON.stringify(app));
-				});
+		document.querySelectorAll('li input[type="text"]').forEach((input) => {
+			input.addEventListener('focus', () => {
+				input.parentElement.classList.add('editing');
 			});
+
+			input.addEventListener('blur', () => {
+				input.parentElement.classList.remove('editing');
+			});
+
+			input.addEventListener('keydown', (event) => {
+				if (event.key === 'Enter' || event.key === 'Escape') {
+					input.blur();
+				}
+			});
+
+			input.addEventListener('input', (event) => {
+				const checklistItemId = parseInt(
+					event.currentTarget.parentElement.id.split('-')[2]
+				);
+
+				const checklistItem = activeTodo.checklist.find(
+					(checklistItem) => checklistItem.id === checklistItemId
+				);
+
+				if (checklistItem === undefined) return;
+
+				checklistItem.name = event.currentTarget.value;
+
+				localStorage.setItem('app', JSON.stringify(app));
+			});
+		});
 	}
 
+	// 3. Handle Toggle Checklist Item
 	function handleToggleChecklistItem() {
 		const checkboxes = document.querySelectorAll('.done');
 
@@ -470,8 +492,9 @@ import contentHeader from './components/content-header';
 		});
 	}
 
+	// 4. Handle Delete Checklist Item
 	function handleDeleteChecklistItem() {
-		document.querySelectorAll('.checklist-item button').forEach((button) => {
+		document.querySelectorAll('li button').forEach((button) => {
 			button.addEventListener('click', (event) => {
 				const checklistItemId = parseInt(
 					event.currentTarget.parentElement.id.split('-')[2]
@@ -492,6 +515,7 @@ import contentHeader from './components/content-header';
 
 	/* =================== Update display =================== */
 	function updateDisplay() {
+		// get active project and sorted todos
 		if (app.projects.length > 0 && activeProject === undefined) {
 			activeProject = app.projects[0];
 		}
@@ -510,6 +534,7 @@ import contentHeader from './components/content-header';
 			});
 		}
 
+		// get active todo
 		if (
 			activeProject !== undefined &&
 			activeProject.todos.length > 0 &&
@@ -542,7 +567,7 @@ import contentHeader from './components/content-header';
 			contentHeaderDom.innerHTML = contentHeaderHtml;
 			contentHeaderDom.style.display = 'flex';
 
-			// add event listeners to these buttons
+			// add event listeners to these buttons in header
 			handleAddTodo();
 			handleSortByChange();
 			handleToggleAllTodoCompleted();
@@ -573,7 +598,7 @@ import contentHeader from './components/content-header';
 			}
 		}
 
-		// handle dynamic html element events
+		/* ---------- handle dynamic html element events ---------- */
 		// handle project events
 		handleEditProject();
 		handleDeleteProject();
@@ -592,7 +617,7 @@ import contentHeader from './components/content-header';
 		handleDeleteChecklistItem();
 	}
 
-	/* ============== Get static html elements ============== */
+	/* ============== Get static html element references ============== */
 	const projectListDom = document.querySelector('#project-list');
 	const contentHeaderDom = document.querySelector('#content-header');
 	const todoListDom = document.querySelector('#todo-list');
@@ -600,25 +625,28 @@ import contentHeader from './components/content-header';
 	const dialogDom = document.querySelector('#form-dialog');
 	const closeButton = document.querySelector('#close-dialog-btn');
 
-	/* =================== Initialize app =================== */
+	/* ======================== Initialize app ======================== */
 	const app = localStorage.getItem('app')
 		? rehydrateApp(JSON.parse(localStorage.getItem('app')))
 		: initializeApp();
 	let activeProject = app.projects[0] ?? undefined;
 	let activeTodo = activeProject.todos[0] ?? undefined;
-	let sortBy = 'title';
+	let sortBy = 'priority';
 	let sortedTodos = [];
 
 	updateDisplay();
 
-	/* =========== handle static html element events =========== */
+	/* =============== handle static html element events =============== */
 	closeButton.addEventListener('click', () => {
 		dialogDom.close();
 	});
 
 	// While dialog closing, remove the form in it
 	dialogDom.addEventListener('close', () => {
-		dialogDom.removeChild(dialogDom.lastChild);
+		const form = dialogDom.querySelector('form');
+		if (form !== null) {
+			form.remove();
+		}
 		updateDisplay();
 	});
 

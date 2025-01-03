@@ -4,7 +4,7 @@ import { capitalizeFirstLetter, EDIT_ICON, DELETE_ICON } from '../utils';
 export default function projectList(projects, activeProject) {
 	if (projects.length === 0) return null;
 
-	const projectListHtml = projects
+	return projects
 		.map(
 			(project) => `
       <li
@@ -33,6 +33,4 @@ export default function projectList(projects, activeProject) {
     `
 		)
 		.join('');
-
-	return projectListHtml;
 }

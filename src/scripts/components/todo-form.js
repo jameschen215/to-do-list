@@ -9,8 +9,7 @@ export default function todoForm(todo) {
 	form.classList.add('todo-form');
 
 	form.innerHTML = `
-    <form id="todo-form" class="todo-form" method="dialog">
-      <h2 class="form-header">
+      <h2>
         ${todo === undefined ? 'Add todo' : 'Edit todo'}
       </h2>
 
@@ -91,8 +90,7 @@ export default function todoForm(todo) {
 
       <div class="form-group">
         <button type="submit" class="submit-btn">Submit</button>
-      </div>
-    </form>`;
+      </div>`;
 
 	return form;
 }

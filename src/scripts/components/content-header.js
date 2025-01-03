@@ -18,12 +18,12 @@ export default function contentHeader(activeProject, sortBy) {
 			<div class="sort-icon">${SORT_ICON}</div>
 
 			<button id="sort-trigger" class="trigger">
-				${capitalizeFirstLetter(sortBy)}
+				${sortBy.toUpperCase()}
 			</button>
 
 			<div id="dropdown-sort" class="dropdown hidden">
+			<button class="option" data-sort-by="priority">Priority</button>
 				<button class="option" data-sort-by="title">Title</button>
-				<button class="option" data-sort-by="priority">Priority</button>
 				<button class="option" data-sort-by="due">Due</button>
 			</div>
 		</div>

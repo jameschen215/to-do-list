@@ -35,7 +35,7 @@ export default function todoList(todos, activeTodo) {
 			}
 
 			return `
-        <div class="${todoClassNames}" data-todo-id="${todo.id}">
+        <div class="${todoClassNames}" id="todo-${todo.id}">
 					<input 
 						class="completed-input" 
 						type="checkbox" 
@@ -49,14 +49,10 @@ export default function todoList(todos, activeTodo) {
 					</div>
 					
 					<div>
-						<button 
-							class="icon-btn edit-btn edit-todo-btn" 
-							data-todo-id="${todo.id}">
+						<button class="icon-btn edit-btn edit-todo-btn">
 							${EDIT_ICON}
 						</button>
-						<button 
-							class="icon-btn delete-btn delete-todo-btn" 
-							data-todo-id="${todo.id}">
+						<button class="icon-btn delete-btn delete-todo-btn">
 							${DELETE_ICON}
 						</button>
 					</div>

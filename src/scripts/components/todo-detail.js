@@ -20,9 +20,9 @@ export default function todoDetail(activeProject, activeTodo) {
         <div>${DOUBLE_ARROW_ICON}</div>
         <span>${capitalizeFirstLetter(activeProject.title)}</span>
       </div>
+
       <button 
-				class="toggle-complete-btn ${activeTodo.completed ? 'completed' : ''}"
-				>
+        class="toggle-completed-btn ${activeTodo.completed ? 'completed' : ''}">
         ${activeTodo.completed ? 'Completed' : 'Mark as complete'}
       </button>
     </div>
@@ -32,18 +32,17 @@ export default function todoDetail(activeProject, activeTodo) {
 		.map(
 			(checklistItem) => `
         <li 
-          class="checklist-item ${checklistItem.name === '' ? 'active' : ''}"  
+          class="${checklistItem.name === '' ? 'active' : ''}"  
           id="checklist-item-${checklistItem.id}" >
 
           <input 
             type="checkbox" 
             name="done" 
-
             ${checklistItem.done ? 'checked' : ''} />
 
           <input 
             type="text" 
-            value="${checklistItem.name}" 
+            value="${capitalizeFirstLetter(checklistItem.name)}" 
           />
 
 
@@ -56,11 +55,11 @@ export default function todoDetail(activeProject, activeTodo) {
 
 	const contentHtml = `
     <div class="detail-content ${activeTodo.completed ? 'completed' : ''}">
-      <div class="detail-row detail-title">
+      <div class="detail-row">
         <h2>${capitalizeFirstLetter(activeTodo.title)}</h2>
       </div>
 
-      <div class="detail-row detail-description">
+      <div class="detail-row">
         <h3>Description</h3>
         <p>${
 					activeTodo.description !== ''
@@ -69,30 +68,30 @@ export default function todoDetail(activeProject, activeTodo) {
 				}</p>
       </div>
 
-      <div class="detail-row detail-date">
+      <div class="detail-row">
         <h3>Due Date</h3>
         <p>${formatDistanceToNow(activeTodo.due)} left.</p>
       </div>
 
-      <div class="detail-row detail-priority">
+      <div class="detail-row">
         <h3>Priority</h3>
         <p>${priorities[activeTodo.priority] || 'Low'}</p>
       </div>
 
-      <div class="detail-row detail-notes">
+      <div class="detail-row">
         <h3>Notes</h3>
         <p>${activeTodo.notes !== '' ? activeTodo.notes : 'No notes.'}</p>
       </div>
 
-      <div class="detail-row detail-checklist">
+      <div class="detail-row">
         <h3>Checklist</h3>
 
         <ul class="checklist">
           ${activeTodo.checklist.length === 0 ? '' : checklistHtml}
 
-          <li class="checklist-item add-checklist-item-btn">
+          <li class="button-container">
             <button>
-              <div class="check-icon"></div>
+              <div></div>
               <span>
                 Add a new checklist item
               </span>

@@ -1,5 +1,4 @@
 import '../../styles/project-form.css';
-
 import { capitalizeFirstLetter } from '../utils';
 
 export default function projectForm(project) {
@@ -8,8 +7,7 @@ export default function projectForm(project) {
 	form.id = 'project-form';
 	form.classList.add('project-form');
 	form.innerHTML = `
-	<form method="dialog" id="project-form" class="project-form">
-		<h2 class="form-title">
+		<h2>
       ${project === undefined ? 'Add Project' : 'Edit Project'}
     </h2>
 
@@ -23,16 +21,14 @@ export default function projectForm(project) {
         value="${
 					project === undefined ? '' : capitalizeFirstLetter(project.title)
 				}"
+				autoFocus
 				required
 			/>
 		</div>
 
 		<div class="form-group">
-			<button type="submit" class="submit-btn">
-				Submit
-			</button>
-		</div>
-	</form>`;
+			<button type="submit">Submit</button>
+		</div>`;
 
 	return form;
 }
