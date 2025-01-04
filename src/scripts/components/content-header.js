@@ -1,16 +1,11 @@
 import '../../styles/content-header.css';
-import {
-	capitalizeFirstLetter,
-	PLUS_ICON,
-	SORT_ICON,
-	CHECK_ICON,
-} from '../utils';
+import { PLUS_ICON, SORT_ICON, CHECK_ICON } from '../utils';
 
 export default function contentHeader(activeProject, sortBy) {
 	if (activeProject === undefined) return null;
 
 	return `
-	  <h1 class="project-title">${capitalizeFirstLetter(activeProject.title)}</h1>
+	  <h1 class="project-title">${activeProject.title}</h1>
 	    
 		<div class="divider"></div>
 

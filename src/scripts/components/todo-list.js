@@ -1,11 +1,11 @@
 import '../../styles/todo-list.css';
-import { capitalizeFirstLetter, DELETE_ICON, EDIT_ICON } from '../utils';
+import { DELETE_ICON, EDIT_ICON } from '../utils';
 
 export default function todoList(todos, activeTodo) {
 	if (todos.length === 0) {
 		return `
 			<h4 style="text-align: center; margin-top: 30px;">No todo yet</h4>
-			<p style="text-align: center;">Click + to add your todo items.</p>
+			<p style="text-align: center;">Click + to add a todo item.</p>
 		`;
 	}
 
@@ -44,7 +44,7 @@ export default function todoList(todos, activeTodo) {
 					/>
 
 					<div>
-						<span>${capitalizeFirstLetter(todo.title)}</span>
+						<span>${todo.title}</span>
 						<span class="${priorityClassNames}">${priorityContent}</span>
 					</div>
 					

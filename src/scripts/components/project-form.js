@@ -1,5 +1,4 @@
 import '../../styles/project-form.css';
-import { capitalizeFirstLetter } from '../utils';
 
 export default function projectForm(project) {
 	const form = document.createElement('form');
@@ -18,9 +17,7 @@ export default function projectForm(project) {
 				name="project-title"
 				class="form-control"
 				placeholder="Project Title"
-        value="${
-					project === undefined ? '' : capitalizeFirstLetter(project.title)
-				}"
+        value="${project === undefined ? '' : project.title}"
 				autoFocus
 				required
 			/>

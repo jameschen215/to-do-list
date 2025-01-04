@@ -1,13 +1,16 @@
+import { ca } from 'date-fns/locale';
+import { capitalizeFirstLetter } from '../utils';
+
 let nextId = 1;
 
 export default class Todo {
 	constructor({ title, due, priority, description = '', notes = '' }) {
 		this.id = nextId++;
-		this.title = title;
+		this.title = capitalizeFirstLetter(title);
 		this.due = new Date(due);
 		this.priority = parseInt(priority, 10);
-		this.description = description;
-		this.notes = notes;
+		this.description = capitalizeFirstLetter(description);
+		this.notes = capitalizeFirstLetter(notes);
 		this.completed = false;
 		this.createdDate = new Date();
 		this.checklist = [];
@@ -28,12 +31,12 @@ export default class Todo {
 	}
 
 	editTodo({ title, due, priority, completed, description, notes }) {
-		this.title = title;
+		this.title = capitalizeFirstLetter(title);
 		this.due = due;
 		this.priority = parseInt(priority, 10);
 		this.completed = completed;
-		this.description = description;
-		this.notes = notes;
+		this.description = capitalizeFirstLetter(description);
+		this.notes = capitalizeFirstLetter(notes);
 		this.updatedDate = new Date();
 	}
 

@@ -125,13 +125,18 @@ import contentHeader from './components/content-header';
 
 				if (projectId === activeProject.id && app.projects.length > 0) {
 					activeProject = app.projects[0];
+
+					if (activeProject.todos.length > 0) {
+						activeTodo = activeProject.todos[0];
+					} else {
+						activeTodo = undefined;
+					}
 				} else {
 					activeProject = undefined;
 				}
 
 				localStorage.setItem('app', JSON.stringify(app));
 				updateDisplay();
-				console.log(`Project width ID ${projectId} has been eliminated.`);
 			});
 		});
 	}
@@ -183,7 +188,6 @@ import contentHeader from './components/content-header';
 				const newTodo = new Todo(Object.fromEntries(formData.entries()));
 				activeProject.todos.push(newTodo);
 				activeTodo = newTodo;
-				console.log(Object.fromEntries(formData.entries()));
 
 				localStorage.setItem('app', JSON.stringify(app));
 
@@ -198,7 +202,6 @@ import contentHeader from './components/content-header';
 		document.querySelectorAll('.edit-todo-btn').forEach((todoListItem) =>
 			todoListItem.addEventListener('click', (event) => {
 				event.stopPropagation();
-				console.log('clicked');
 
 				const todoId = parseInt(
 					event.currentTarget.parentElement.parentElement.id.split('-')[1]
@@ -502,9 +505,6 @@ import contentHeader from './components/content-header';
 
 				if (isNaN(checklistItemId)) return;
 
-				console.log(checklistItemId);
-				console.log(activeTodo);
-
 				activeTodo.deleteChecklistItem(checklistItemId);
 
 				localStorage.setItem('app', JSON.stringify(app));
@@ -549,17 +549,17 @@ import contentHeader from './components/content-header';
 		const todoListHtml = todoList(sortedTodos, activeTodo);
 		const todoDetailHtml = todoDetail(activeProject, activeTodo);
 
-		// if no project exists or no active project exists,
-		if (projectListHtml === null || contentHeaderHtml === null) {
-			// don't display content section
-			contentHeaderDom.style.display = 'none';
-			todoListDom.style.display = 'none';
-			todoDetailDom.style.display = 'none';
-		}
-
 		// get project list in sidebar and make it visible
 		projectListDom.innerHTML = projectListHtml;
 		projectListDom.style.display = 'flex';
+
+		// if no project exists or no active project exists,
+		// if (contentHeaderHtml === null) {
+		// 	// don't display content section
+		// 	contentHeaderDom.style.display = 'none';
+		// 	todoListDom.style.display = 'none';
+		// 	todoDetailDom.style.display = 'none';
+		// }
 
 		// if active project exists
 		if (contentHeaderHtml !== null) {
@@ -572,30 +572,29 @@ import contentHeader from './components/content-header';
 			handleSortByChange();
 			handleToggleAllTodoCompleted();
 
-			// if active project has any todo item
-			if (todoListHtml !== null) {
-				// get todos and make them visible
-				todoListDom.innerHTML = todoListHtml;
-				todoListDom.style.display = 'flex';
+			// get todos and make them visible
+			todoListDom.innerHTML = todoListHtml;
+			todoListDom.style.display = 'flex';
 
-				// and if there is active todo, make it visible in detail section
-				if (todoDetailHtml !== null) {
-					todoDetailDom.innerHTML = todoDetailHtml;
-					todoDetailDom.style.display = 'block';
-				} else {
-					// otherwise, make detail section invisible
-					todoDetailDom.style.display = 'none';
-				}
+			// and if there is active todo, make it visible in detail section
+			if (todoDetailHtml !== null) {
+				todoDetailDom.innerHTML = todoDetailHtml;
+				todoDetailDom.style.display = 'block';
+
+				// handle checklist events
+				handleAddChecklistItem();
+				handleChecklistItemClick();
+				handleToggleChecklistItem();
+				handleDeleteChecklistItem();
 			} else {
-				// if there is no todo in active project, tell the user how to add one
-				todoListDom.innerHTML = `
-					<h4 style="text-align: center; margin-top: 30px;">No todo yet</h4>
-					<p style="text-align: center;">Click + to add todo.</p>
-				`;
-
-				// and make detail section invisible
+				// otherwise, make detail section invisible
 				todoDetailDom.style.display = 'none';
 			}
+		} else {
+			// don't display content section
+			contentHeaderDom.style.display = 'none';
+			todoListDom.style.display = 'none';
+			todoDetailDom.style.display = 'none';
 		}
 
 		/* ---------- handle dynamic html element events ---------- */
@@ -609,12 +608,6 @@ import contentHeader from './components/content-header';
 		handleDeleteTodo();
 		handleTodoClick();
 		handleToggleTodos();
-
-		// handle checklist events
-		handleAddChecklistItem();
-		handleChecklistItemClick();
-		handleToggleChecklistItem();
-		handleDeleteChecklistItem();
 	}
 
 	/* ============== Get static html element references ============== */

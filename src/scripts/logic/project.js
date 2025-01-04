@@ -1,16 +1,17 @@
 import Todo from '../logic/to-do';
+import { capitalizeFirstLetter } from '../utils';
 
 let nextId = 1;
 
 export default class Project {
 	constructor(title) {
 		this.id = nextId++;
-		this.title = title;
+		this.title = capitalizeFirstLetter(title);
 		this.todos = [];
 	}
 
 	editTitle(title) {
-		this.title = title;
+		this.title = capitalizeFirstLetter(title);
 	}
 
 	addTodo({ title, due, priority, description = '', notes = '' }) {

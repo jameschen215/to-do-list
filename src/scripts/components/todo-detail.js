@@ -18,7 +18,7 @@ export default function todoDetail(activeProject, activeTodo) {
       <div class="breadcrumb">
         <span>My projects</span>
         <div>${DOUBLE_ARROW_ICON}</div>
-        <span>${capitalizeFirstLetter(activeProject.title)}</span>
+        <span>${activeProject.title}</span>
       </div>
 
       <button 
@@ -42,7 +42,7 @@ export default function todoDetail(activeProject, activeTodo) {
 
           <input 
             type="text" 
-            value="${capitalizeFirstLetter(checklistItem.name)}" 
+            value="${checklistItem.name}" 
           />
 
 
@@ -56,7 +56,7 @@ export default function todoDetail(activeProject, activeTodo) {
 	const contentHtml = `
     <div class="detail-content ${activeTodo.completed ? 'completed' : ''}">
       <div class="detail-row">
-        <h2>${capitalizeFirstLetter(activeTodo.title)}</h2>
+        <h2>${activeTodo.title}</h2>
       </div>
 
       <div class="detail-row">
@@ -70,7 +70,9 @@ export default function todoDetail(activeProject, activeTodo) {
 
       <div class="detail-row">
         <h3>Due Date</h3>
-        <p>${formatDistanceToNow(activeTodo.due)} left.</p>
+        <p>
+          ${capitalizeFirstLetter(formatDistanceToNow(activeTodo.due))} left.
+        </p>
       </div>
 
       <div class="detail-row">
